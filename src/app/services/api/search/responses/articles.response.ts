@@ -1,4 +1,4 @@
-import {CartPrepareItemModel} from '../../../../shared/models/cart-prepare-item.model';
+import {CartPrepareItemModel} from '@shared/models/cart-prepare-item.model';
 
 export type SearchArticlesResponse = SearchArticle[];
 

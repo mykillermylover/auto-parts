@@ -1,11 +1,11 @@
 import HttpClient from '../../../httpClient';
 import {SearchBrandsObjectResponse, searchBrandsObjectToArray} from './responses/brands.response';
 import {SearchArticlesResponse} from './responses/articles.response';
-import {SearchConstants} from '../../../consts';
+import {SearchConstants} from '@consts';
 import {SearchHistoryResponse} from './responses/history.response';
 import {SearchTipsResponse} from './responses/tips.response';
 import {SearchAdvicesResponse} from './responses/advices.response';
-import {ItemModel} from '../../../shared/models/item.model';
+import {ItemModel} from '@shared/models/item.model';
 
 export class SearchService {
     private http = HttpClient;

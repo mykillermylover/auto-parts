@@ -1,4 +1,4 @@
-import {ItemModel} from '../../../../shared/models/item.model';
+import {ItemModel} from '@shared/models/item.model';
 
 export type SearchBrandsObjectResponse = Record<string, SearchBrand>
 
