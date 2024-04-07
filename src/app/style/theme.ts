@@ -3,8 +3,10 @@ import {
     MD3LightTheme as DefaultLightTheme,
     MD3DarkTheme as DefaultDarkTheme
 } from 'react-native-paper';
-import {Theme} from "@react-navigation/native";
+import {Theme} from '@react-navigation/native';
+import {ColorSchemeName} from 'react-native';
 
+// generated themes
 export const lightTheme: MD3Theme = {
     ...DefaultLightTheme,
     colors: {
@@ -50,7 +52,7 @@ export const lightTheme: MD3Theme = {
         onSurfaceDisabled: 'rgba(32, 26, 23, 0.38)',
         backdrop: 'rgba(58, 46, 38, 0.4)'
     }
-}
+};
 export const darkTheme: MD3Theme = {
     ...DefaultDarkTheme,
     colors: {
@@ -96,7 +98,7 @@ export const darkTheme: MD3Theme = {
         onSurfaceDisabled: 'rgba(236, 224, 218, 0.38)',
         backdrop: 'rgba(58, 46, 38, 0.4)'
     }
-}
+};
 
 export const lightNavTheme: Theme = {
     dark: false,
@@ -107,7 +109,7 @@ export const lightNavTheme: Theme = {
         border: lightTheme.colors.onBackground,
         notification: lightTheme.colors.tertiary,
     }
-}
+};
 
 export const darkNavTheme: Theme = {
     dark: true,
@@ -117,5 +119,19 @@ export const darkNavTheme: Theme = {
         text: darkTheme.colors.primary,
         border: darkTheme.colors.surfaceVariant,
         notification: darkTheme.colors.tertiary,
+    }
+};
+
+export default function makeTheme(colorScheme: ColorSchemeName) {
+    if(colorScheme == 'dark') {
+        return {
+            appTheme: darkTheme,
+            navTheme: darkNavTheme
+        };
+    } else {
+        return {
+            appTheme: lightTheme,
+            navTheme: lightNavTheme
+        };
     }
 }
