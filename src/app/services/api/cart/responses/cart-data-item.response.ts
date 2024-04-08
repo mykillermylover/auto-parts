@@ -1,6 +1,3 @@
-export type CartDataItemResponse = CartDataItem[];
+import {IdentifyNamedModel} from '@shared/models/identify-named.model';
 
-export type CartDataItem = {
-    id: number;
-    name: string;
-}
+export type CartDataItemResponse = IdentifyNamedModel[];

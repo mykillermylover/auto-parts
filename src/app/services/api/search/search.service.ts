@@ -1,4 +1,4 @@
-import HttpClient from '../../../httpClient';
+import HttpClient from '@httpClient';
 import {SearchBrandsObjectResponse, searchBrandsObjectToArray} from './responses/brands.response';
 import {SearchArticlesResponse} from './responses/articles.response';
 import {SearchConstants} from '@consts';

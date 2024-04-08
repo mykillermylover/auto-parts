@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
 
 const {login, pass} = Init();
 
@@ -21,8 +22,8 @@ export default HttpClient;
 
 // init login and password from Storage
 export function Init() {
-    const login = process.env['EXPO_PUBLIC_ADMIN_LOGIN'];
-    const pass = process.env['EXPO_PUBLIC_ADMIN_PASS'];
+    const login = SecureStore.getItem('userLogin');
+    const pass = SecureStore.getItem('userPassword');
     return {
         login,
         pass

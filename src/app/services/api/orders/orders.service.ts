@@ -1,5 +1,5 @@
 import {OrderCartProp} from '@services/api/orders/props/order-cart.prop';
-import HttpClient from '../../../httpClient';
+import HttpClient from '@httpClient';
 import {OrdersConstants} from '@consts';
 import {OrderCartResponse} from '@services/api/orders/response/order-cart.response';
 import {OrderInstantProp} from '@services/api/orders/props/order-instant.prop';

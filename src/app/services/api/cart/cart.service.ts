@@ -1,4 +1,4 @@
-import HttpClient from '../../../httpClient';
+import HttpClient from '@httpClient';
 import {CartListResponse} from './responses/carts-list.response';
 import {OrderPositionModel} from '@shared/models/order-position.model';
 import {PositionsResponse} from './responses/positions.response';
