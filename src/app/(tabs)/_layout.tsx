@@ -1,6 +1,6 @@
 import {Icon} from 'react-native-paper';
 import React from 'react';
-import {MaterialBottomTabs} from '../shared/material-bottom-tabs';
+import {MaterialBottomTabs} from '@shared/components/material-bottom-tabs';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function TabLayout() {

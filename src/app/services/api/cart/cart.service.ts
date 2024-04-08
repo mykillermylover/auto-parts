@@ -1,6 +1,6 @@
 import HttpClient from '../../../httpClient';
 import {CartListResponse} from './responses/carts-list.response';
-import {CartChangeItemModel} from '@shared/models/cart-change-item.model';
+import {OrderPositionModel} from '@shared/models/order-position.model';
 import {PositionsResponse} from './responses/positions.response';
 import {StatusResponse} from '@shared/responses/status.response';
 import {CartContentResponse} from './responses/cart-content.response';
@@ -18,7 +18,7 @@ export class CartService {
         return data;
     }
 
-    async cartAddItems(positions: CartChangeItemModel[]) {
+    async cartAddItems(positions: OrderPositionModel[]) {
         const { data } = await this.http.post<PositionsResponse>(`${this.url}/add`, null,
             {
                 params: {
@@ -29,13 +29,13 @@ export class CartService {
         return data;
     }
 
-    async cartDeleteItems(positions: CartChangeItemModel[]) {
+    async cartDeleteItems(positions: OrderPositionModel[]) {
         if (!positions.every(position => position.quantity <= 0)) return {} as PositionsResponse;
 
         return this.cartAddItems(positions);
     }
 
-    async cartChangeQuantity(position: CartChangeItemModel) {
+    async cartChangeQuantity(position: OrderPositionModel) {
         return this.cartDeleteItems([{...position, quantity: 0}])
             .then(() => this.cartAddItems([position]));
     }

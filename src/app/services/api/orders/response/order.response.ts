@@ -5,7 +5,7 @@ export type OrderResponse = {
     status: string;
     statusId: number;
     statusCode: string;
-    positionQuantity: number;
+    positionsQuantity: number;
     sum: number;
     date: string;
     comment: string;

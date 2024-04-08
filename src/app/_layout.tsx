@@ -4,9 +4,9 @@ import {useColorScheme} from 'react-native';
 import makeTheme from './style/theme';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {ThemeProvider} from '@react-navigation/native';
-import {MaterialStack} from './shared/material-stack';
+import MaterialStack from '@shared/components/material-stack';
 import React from 'react';
-import MaterialNavBar from './shared/material-navbar';
+import MaterialNavBar from './shared/components/material-navbar';
 
 export default function AppLayout() {
     const colorScheme = useColorScheme();
