@@ -1,12 +1,13 @@
-import {Flex} from "react-native-flex-layout";
-import {Button} from "react-native-paper";
-import {Link} from "expo-router";
+import {Flex} from 'react-native-flex-layout';
+import {Button} from 'react-native-paper';
+import {Link} from 'expo-router';
+import React from 'react';
 
-export default function Tab() {
+export default function SettingsTab() {
     return (
         <Flex fill center>
-            <Link href={'/components/Home'}>
-                <Button mode='elevated'>Home</Button>
+            <Link href={{pathname: './((auth))/login.component', params: { name: 'Login'} }}>
+                <Button mode='elevated'>Login Form</Button>
             </Link>
         </Flex>
     );
