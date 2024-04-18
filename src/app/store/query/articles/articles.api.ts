@@ -1,5 +1,5 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
-import {axiosBaseQuery} from '@shared/axios.query';
+import {axiosBaseQuery} from '@store/query/axios.query';
 import {ArticlesBrandsResponse} from '@store/query/articles/responses/articles-brands.response';
 import {ArticleInfoResponse} from '@store/query/articles/responses/article-info.response';
 import {ArticleInfoProp} from '@store/query/articles/article-info.prop';
@@ -45,4 +45,7 @@ export const articlesApi = createApi({
     }
 });
 
-export const { useAllBrandsQuery, useInfoQuery } = articlesApi;
+export const {
+    useAllBrandsQuery,
+    useInfoQuery
+} = articlesApi;

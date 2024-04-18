@@ -1,6 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {axiosBaseQuery} from '@shared/axios.query';
+import {axiosBaseQuery} from '@store/query/axios.query';
 import {CartListResponse} from './responses/carts-list.response';
 import {OrderPositionModel} from '@shared/models/order-position.model';
 import {PositionsResponse} from './responses/positions.response';

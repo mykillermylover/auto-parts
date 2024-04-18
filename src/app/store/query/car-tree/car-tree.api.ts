@@ -1,5 +1,5 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
-import {axiosBaseQuery} from '@shared/axios.query';
+import {axiosBaseQuery} from '@store/query/axios.query';
 import {CarModelsResponse} from '@store/query/car-tree/car-models.response';
 import {CarModificationResponse} from '@store/query/car-tree/car-modification.response';
 

@@ -1,7 +1,5 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
-import {axiosBaseQuery} from '@shared/axios.query';
-
-import {SearchConstants} from '@consts';
+import {axiosBaseQuery} from '@store/query/axios.query';
 import {
     SearchBrand,
     SearchBrandsObjectResponse,
@@ -10,9 +8,6 @@ import {
 import {SearchArticlesResponse} from './responses/articles.response';
 import {SearchHistoryResponse} from './responses/history.response';
 import {SearchTipsResponse} from './responses/tips.response';
-import {ItemModel} from '@shared/models/item.model';
-import {SearchAdvicesResponse} from './responses/advices.response';
-import {AdvicesBatchResponse} from './responses/advices-batch.response';
 
 export const searchApi = createApi({
     reducerPath: 'searchApi',
@@ -61,25 +56,6 @@ export const searchApi = createApi({
                     }
                 })
             }),
-            advices: build.query<SearchAdvicesResponse, { item: ItemModel, limit: number }>({
-                query: ({item: {brand, number}, limit = SearchConstants.advicesLimit}) => ({
-                    url: 'advices',
-                    params: {
-                        brand,
-                        number,
-                        limit
-                    }
-                })
-            }),
-            advicesBatch: build.mutation<AdvicesBatchResponse[], { articles: ItemModel[], limit: number }>({
-                query: ({articles, limit = SearchConstants.advicesLimit}) => ({
-                    url: 'advices/batch',
-                    data: {
-                        articles,
-                        limit
-                    }
-                })
-            })
         };
     }
 });
@@ -90,6 +66,4 @@ export const {
     useBatchMutation,
     useHistoryQuery,
     useTipsQuery,
-    useAdvicesQuery,
-    useAdvicesBatchMutation
 } = searchApi;

@@ -1,12 +1,12 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {axiosBaseQuery} from '@shared/axios.query';
+import {axiosBaseQuery} from '@store/query/axios.query';
 import {OrderCartResponse} from '@store/query/orders/response/order-cart.response';
 import {OrderInstantProp} from '@store/query/orders/props/order-instant.prop';
 import {OrderStatusesResponse} from '@store/query/orders/response/order-statuses.response';
 import {OrderListResponse} from '@store/query/orders/response/order-list.response';
 import {OrdersResponse} from '@store/query/orders/response/orders.response';
-import {OrdersConstants} from '@consts';
+import {OrdersConstants} from '../../../shared/consts';
 
 export const ordersApi = createApi({
     reducerPath: 'ordersApi',

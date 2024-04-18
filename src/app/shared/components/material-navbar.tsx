@@ -1,21 +1,21 @@
 import {Appbar} from 'react-native-paper';
 import {getHeaderTitle} from '@react-navigation/elements';
 import {StackHeaderProps} from '@react-navigation/stack';
-import React from 'react';
-type RouteParams = {
-    name: string;
-    back: boolean;
-}
-export default function MaterialNavBar({navigation, route, options, back}: StackHeaderProps) {
-    const routeParams = route.params as RouteParams;
-    const title = getHeaderTitle(options, routeParams?.name ?? route.name);
+import React, {ReactNode} from 'react';
 
+type RouteParams = {
+    back: boolean,
+}
+export function MaterialNavBar({navigation, route, options, back, children}: StackHeaderProps & {children?: ReactNode}) {
+    const routeParams = route.params as RouteParams;
+    const title = getHeaderTitle(options, route.name);
     const backArrow = back && routeParams.back;
 
     return (
-        <Appbar.Header>
+        <Appbar.Header elevated={true}>
             {backArrow ? <Appbar.BackAction onPress={navigation.goBack}/> : null}
             <Appbar.Content title={title}/>
+            <Appbar.Content title={children}/>
         </Appbar.Header>
     );
 }

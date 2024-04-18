@@ -26,8 +26,8 @@ const userActions = {
         if (state)
             state.name = action.payload;
     },
-    setUser: (state: UserState, action: PayloadAction<{ user: UserState }>) => {
-        return action.payload.user;
+    setUser: (state: UserState, action: PayloadAction<UserState>) => {
+        return action.payload;
     }
 };
 

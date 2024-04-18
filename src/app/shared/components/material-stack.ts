@@ -5,4 +5,4 @@ const {Navigator} = createStackNavigator();
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
-export default MaterialStack = withLayoutContext<StackNavigationOptions, typeof Navigator>(Navigator);
+export const MaterialStack = withLayoutContext<StackNavigationOptions, typeof Navigator>(Navigator);

@@ -1,19 +1,29 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {VStack} from 'react-native-flex-layout';
-import LoginForm from '@components/LoginForm';
-import {AuthChangeScreenButton} from '@components/AuthChangeScreenButton';
+import RegisterForm from '@components/register-form/RegisterForm';
+import {FAB} from 'react-native-paper';
+import HideWithKeyboard from 'react-native-hide-with-keyboard';
+import {useExpoRouter} from 'expo-router/build/global-state/router-store';
 
 export default function RegisterComponent() {
 
-    return (
-        <SafeAreaView style={style.h100}>
-            <VStack style={style.flexContainer}>
-                <LoginForm/>
-            </VStack>
+    const router = useExpoRouter();
 
-            <AuthChangeScreenButton type={'register'}/>
+    return (
+        <SafeAreaView style={style.flexContainer}>
+            <View style={style.wrapper}>
+                <RegisterForm/>
+            </View>
+
+            <View style={style.fab}>
+                <HideWithKeyboard>
+                    <FAB
+                        icon='arrow-left'
+                        onPress={router.goBack}
+                    />
+                </HideWithKeyboard>
+            </View>
         </SafeAreaView>
     );
 }
@@ -21,10 +31,15 @@ export default function RegisterComponent() {
 const style = StyleSheet.create({
     flexContainer: {
         flex: 1,
+    },
+    wrapper: {
         justifyContent: 'center',
         marginHorizontal: 30
     },
-    h100: {
-        height: '100%',
-    }
+    fab: {
+        position: 'absolute',
+        margin: 30,
+        right: 0,
+        bottom: 0,
+    },
 });

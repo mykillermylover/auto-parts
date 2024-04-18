@@ -1,4 +1,4 @@
-import {UserConstants} from '@consts';
+import {UserConstants} from '../../../shared/consts';
 
 export type UserProp = {
     /**

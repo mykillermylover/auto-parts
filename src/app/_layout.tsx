@@ -1,52 +1,44 @@
 import 'react-native-gesture-handler';
-import {ActivityIndicator, PaperProvider} from 'react-native-paper';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {PaperProvider, useTheme} from 'react-native-paper';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {ThemeProvider} from '@react-navigation/native';
-import MaterialStack from '@shared/components/material-stack';
-import React from 'react';
-import MaterialNavBar from './shared/components/material-navbar';
-import {Provider, useSelector} from 'react-redux';
+import React, {useEffect} from 'react';
+import {Provider} from 'react-redux';
+
 import store from './store/app.store';
 import useAppTheme from '@shared/hooks/useAppTheme';
 import InitApp from '@init';
-import UserSelectors from '@store/user/user.selectors';
-import InitSelectors from '@store/init/init.selectors';
-import {Flex} from 'react-native-flex-layout';
+import Toast from 'react-native-toast-message';
+import {ToastService} from '@services/toast.service';
+import AppNav from '@components/app-navigation';
 
 InitApp();
-
 export default function AppLayout() {
     const [appTheme, navTheme] = useAppTheme();
+    ToastService.theme = useTheme();
+
+    useEffect(() => {
+        console.log('component did mount!');
+        return () => {
+            console.log('component did unmount!');
+        };
+    }, []);
 
     return (
-        <Provider store={store}>
-            <PaperProvider theme={appTheme}>
-                <SafeAreaProvider>
-                    <ThemeProvider value={navTheme}>
-                        <AppNav/>
-                    </ThemeProvider>
-                </SafeAreaProvider>
-            </PaperProvider>
-        </Provider>
+        <>
+            <Provider store={store}>
+                <PaperProvider theme={appTheme}>
+                    <SafeAreaProvider>
+                        <ThemeProvider value={navTheme}>
+                            <AppNav />
+                        </ThemeProvider>
+                    </SafeAreaProvider>
+                </PaperProvider>
+            </Provider>
+            <Toast/>
+        </>
+
     );
 }
 
-function AppNav() {
-    const isInit = useSelector(InitSelectors.getInitSelector);
-    const isAuth = useSelector(UserSelectors.isAuth);
 
-    if (!isInit) return (
-        <Flex fill center>
-            <ActivityIndicator size='large'/>
-        </Flex>
-    );
-
-    return (
-        <MaterialStack screenOptions={{
-            header: (props) => <MaterialNavBar {...props}/>
-        }}>
-            <MaterialStack.Screen name='(auth)' options={{headerShown: false}} redirect={isAuth}/>
-            <MaterialStack.Screen name="(tabs)" options={{headerShown: false}} redirect={!isAuth}/>
-        </MaterialStack>
-    );
-}

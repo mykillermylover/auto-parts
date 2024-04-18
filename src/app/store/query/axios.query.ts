@@ -1,8 +1,9 @@
-import {AxiosError, AxiosRequestConfig} from 'axios';
+import {AxiosError, AxiosInstance, AxiosRequestConfig} from 'axios';
 import {BaseQueryFn} from '@reduxjs/toolkit/dist/query/react';
 import HttpClient from '@httpClient';
+import {NetworkError} from '@shared/errors/network.error';
 
-export const axiosBaseQuery =({baseUrl}: { baseUrl: string } = { baseUrl: '' }): BaseQueryFn<
+export const axiosBaseQuery =({baseUrl = '', axiosInstance = HttpClient}: { baseUrl: string, axiosInstance?: AxiosInstance }): BaseQueryFn<
         {
             url: string
             method?: AxiosRequestConfig['method']
@@ -13,7 +14,7 @@ export const axiosBaseQuery =({baseUrl}: { baseUrl: string } = { baseUrl: '' }):
     > =>
     async ({url, method, data, params, headers}) => {
         try {
-            const result = await HttpClient({
+            const result = await axiosInstance({
                 url: baseUrl + url,
                 method,
                 data,
@@ -25,9 +26,9 @@ export const axiosBaseQuery =({baseUrl}: { baseUrl: string } = { baseUrl: '' }):
             const err = axiosError as AxiosError;
             return {
                 error: {
-                    status: err.response?.status,
+                    status: err.response?.status || err?.code || err?.status,
                     data: err.response?.data || err.message,
-                },
+                } as NetworkError
             };
         }
     };

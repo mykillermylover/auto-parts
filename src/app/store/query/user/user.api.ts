@@ -1,14 +1,16 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {UserState} from '@store/user/user-state.model';
-import {axiosBaseQuery} from '@shared/axios.query';
 import {UserProp} from '@store/query/user/user.prop';
 import {NewUserResponse} from '@store/query/user/responses/user-new.response';
 import {SuccessResponse} from '@shared/responses/success.response';
+import {axiosBaseQuery} from '@store/query/axios.query';
+import {SecureStoreService} from '@services/secure-store.service';
+import {UserActions} from '@store/user/user.store';
 
 export const userApi = createApi({
     reducerPath: 'userApi',
-    baseQuery: axiosBaseQuery({baseUrl: 'user/'}),
+    baseQuery: axiosBaseQuery({ baseUrl: 'user/' }),
     endpoints(build) {
         return {
             newUser: build.mutation<NewUserResponse, UserProp>({
@@ -28,7 +30,7 @@ export const userApi = createApi({
                     }
                 })
             }),
-            auth: build.query<UserState, void>({
+            auth: build.mutation<UserState, void>({
                 query: () => ({
                     url: 'info'
                 })
@@ -65,6 +67,21 @@ export const userApi = createApi({
                     }
                 })
             }),
+            logout: build.mutation({
+                queryFn: async (args, {dispatch}) => {
+                    try {
+                        await SecureStoreService.clearStore();
+                        dispatch(UserActions.setUser(null));
+                        return {
+                            data: null
+                        };
+                    } catch(err) {
+                        return {
+                            error: err
+                        };
+                    }
+                }
+            })
         };
     }
 });
@@ -72,7 +89,8 @@ export const userApi = createApi({
 export const {
     useNewUserMutation,
     useUserActivationMutation,
-    useAuthQuery,
+    useAuthMutation,
     useRestorePasswordFirstStageMutation,
-    useRestorePasswordSecondStageMutation
+    useRestorePasswordSecondStageMutation,
+    useLogoutMutation
 } = userApi;
