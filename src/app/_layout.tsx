@@ -1,4 +1,6 @@
 import 'react-native-gesture-handler';
+import 'expo-dev-client';
+
 import {PaperProvider, useTheme} from 'react-native-paper';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {ThemeProvider} from '@react-navigation/native';
@@ -15,6 +17,7 @@ import AppNav from '@components/app-navigation';
 InitApp();
 export default function AppLayout() {
     const [appTheme, navTheme] = useAppTheme();
+
     ToastService.theme = useTheme();
 
     useEffect(() => {

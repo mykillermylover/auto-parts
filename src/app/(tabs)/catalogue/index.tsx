@@ -2,11 +2,10 @@ import {Flex} from 'react-native-flex-layout';
 import {Text} from 'react-native-paper';
 import React from 'react';
 
-export default function SettingsTab() {
+export default function CatalogueMain() {
     return (
-
         <Flex fill center>
-            <Text>Settings</Text>
+            <Text>Catalogue</Text>
         </Flex>
     );
 }

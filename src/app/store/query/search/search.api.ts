@@ -15,7 +15,7 @@ export const searchApi = createApi({
 
     endpoints(build) {
         return {
-            brands: build.query<SearchBrand[], number | string>({
+            searchBrands: build.query<SearchBrand[], number | string>({
                 query: (number) => ({
                     url: 'brands',
                     params: {
@@ -26,16 +26,17 @@ export const searchApi = createApi({
                     return searchBrandsObjectToArray(baseQueryReturnValue);
                 }
             }),
-            articles: build.query<SearchArticlesResponse, { number: number | string, brand: string }>({
+            searchArticles: build.query<SearchArticlesResponse, { number: number | string, brand: string }>({
                 query: ({number, brand}) => ({
                     url: 'articles',
                     params: {
                         number,
-                        brand
+                        brand,
+                        useOnlineStocks: 1
                     }
                 })
             }),
-            batch: build.mutation<SearchArticlesResponse, { number: string, brand: string | number }[]>({
+            searchBatch: build.mutation<SearchArticlesResponse, { number: string, brand: string | number }[]>({
                 query: (searchData) => ({
                     url: 'batch',
                     params: {
@@ -43,12 +44,12 @@ export const searchApi = createApi({
                     }
                 })
             }),
-            history: build.query<SearchHistoryResponse, void>({
+            searchHistory: build.query<SearchHistoryResponse, void>({
                 query: () => ({
                     url: 'history',
-                })
+                }),
             }),
-            tips: build.query<SearchTipsResponse, string | number>({
+            searchTips: build.query<SearchTipsResponse, string | number>({
                 query: (number) => ({
                     url: 'tips',
                     params: {
@@ -61,9 +62,9 @@ export const searchApi = createApi({
 });
 
 export const {
-    useBrandsQuery,
-    useArticlesQuery,
-    useBatchMutation,
-    useHistoryQuery,
-    useTipsQuery,
+    useSearchBrandsQuery,
+    useSearchArticlesQuery,
+    useSearchBatchMutation,
+    useSearchHistoryQuery,
+    useSearchTipsQuery,
 } = searchApi;

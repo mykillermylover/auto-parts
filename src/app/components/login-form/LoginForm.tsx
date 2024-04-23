@@ -9,7 +9,7 @@ import {setHttpClientUserAuthData} from '@httpClient';
 import {NetworkError} from '@shared/errors/network.error';
 import {ResponseService} from '@services/response.service';
 import {ToastService} from '@services/toast.service';
-import {useCheckAuthMutation, useGetAdminDataMutation} from '@store/query/local/local.api';
+import {useCheckAuthMutation} from '@store/query/local/local.api';
 import {defaultFormValues, loginFormConfig, LoginFormValues} from '@components/login-form/login-form.config';
 import md5 from 'md5';
 import {SecureStoreService} from '@services/secure-store.service';
@@ -20,7 +20,6 @@ export default function LoginForm({onLoading}: OnLoadingFunction) {
     const [isLoading, setIsLoading] = useState(false);
 
     const [checkAuth] = useCheckAuthMutation();
-    const [getAdminData] = useGetAdminDataMutation();
 
     const dispatch = useAppDispatch();
     const {control, setFocus, handleSubmit} = useForm({
@@ -39,9 +38,6 @@ export default function LoginForm({onLoading}: OnLoadingFunction) {
             const user = await checkAuth({login, password}).unwrap();
             setHttpClientUserAuthData(login, password);
 
-            const adminData = await getAdminData({login, password}).unwrap();
-
-            await SecureStoreService.setAdminData(adminData);
             await SecureStoreService.setUserData(login, password);
 
             dispatch(UserActions.setUser(user));

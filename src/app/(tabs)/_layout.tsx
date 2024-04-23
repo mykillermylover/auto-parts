@@ -1,12 +1,18 @@
-import {Icon} from 'react-native-paper';
+import {Icon,} from 'react-native-paper';
 import React from 'react';
 import {MaterialBottomTabs} from '@shared/components/material-bottom-tabs';
+import { useTheme } from '@react-navigation/native';
 
 export default function TabLayout() {
+    const theme = useTheme();
+
     return (
-        <MaterialBottomTabs>
+        <MaterialBottomTabs
+            theme={theme}
+            sceneAnimationType='shifting'
+        >
             <MaterialBottomTabs.Screen
-                name='(home)'
+                name='home'
                 options={{
                     title: 'Главная',
                     tabBarIcon: ({color}) => <Icon size={30} source='home' color={color}/>,
@@ -20,10 +26,10 @@ export default function TabLayout() {
                 }}
             />
             <MaterialBottomTabs.Screen
-                name='settings'
+                name='catalogue'
                 options={{
-                    title: 'Настройки',
-                    tabBarIcon: ({color}) => <Icon size={30} source='cog' color={color}/>,
+                    title: 'Каталог',
+                    tabBarIcon: ({color}) => <Icon size={30} source='text-search' color={color}/>,
                 }}
             />
             <MaterialBottomTabs.Screen

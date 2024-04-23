@@ -8,108 +8,108 @@ import {Theme} from '@react-navigation/native';
 // generated themes
 const generatedLightTheme = {
     'colors': {
-        'primary': 'rgb(123, 88, 0)',
+        'primary': 'rgb(166, 59, 0)',
         'onPrimary': 'rgb(255, 255, 255)',
-        'primaryContainer': 'rgb(255, 222, 164)',
-        'onPrimaryContainer': 'rgb(38, 25, 0)',
-        'secondary': 'rgb(122, 89, 0)',
+        'primaryContainer': 'rgb(255, 219, 206)',
+        'onPrimaryContainer': 'rgb(55, 14, 0)',
+        'secondary': 'rgb(138, 81, 0)',
         'onSecondary': 'rgb(255, 255, 255)',
-        'secondaryContainer': 'rgb(255, 222, 163)',
-        'onSecondaryContainer': 'rgb(38, 25, 0)',
-        'tertiary': 'rgb(44, 107, 40)',
+        'secondaryContainer': 'rgb(255, 220, 190)',
+        'onSecondaryContainer': 'rgb(44, 22, 0)',
+        'tertiary': 'rgb(0, 105, 113)',
         'onTertiary': 'rgb(255, 255, 255)',
-        'tertiaryContainer': 'rgb(174, 244, 160)',
-        'onTertiaryContainer': 'rgb(0, 34, 1)',
-        'error': 'rgb(184, 31, 30)',
+        'tertiaryContainer': 'rgb(132, 243, 255)',
+        'onTertiaryContainer': 'rgb(0, 32, 35)',
+        'error': 'rgb(186, 26, 26)',
         'onError': 'rgb(255, 255, 255)',
         'errorContainer': 'rgb(255, 218, 214)',
         'onErrorContainer': 'rgb(65, 0, 2)',
         'background': 'rgb(255, 251, 255)',
-        'onBackground': 'rgb(30, 27, 22)',
+        'onBackground': 'rgb(32, 26, 24)',
         'surface': 'rgb(255, 251, 255)',
-        'onSurface': 'rgb(30, 27, 22)',
-        'surfaceVariant': 'rgb(238, 225, 207)',
-        'onSurfaceVariant': 'rgb(78, 70, 57)',
-        'outline': 'rgb(127, 118, 103)',
-        'outlineVariant': 'rgb(209, 197, 180)',
+        'onSurface': 'rgb(32, 26, 24)',
+        'surfaceVariant': 'rgb(245, 222, 214)',
+        'onSurfaceVariant': 'rgb(83, 67, 62)',
+        'outline': 'rgb(133, 115, 109)',
+        'outlineVariant': 'rgb(216, 194, 186)',
         'shadow': 'rgb(0, 0, 0)',
         'scrim': 'rgb(0, 0, 0)',
-        'inverseSurface': 'rgb(52, 48, 42)',
-        'inverseOnSurface': 'rgb(248, 239, 231)',
-        'inversePrimary': 'rgb(253, 187, 20)',
+        'inverseSurface': 'rgb(54, 47, 44)',
+        'inverseOnSurface': 'rgb(251, 238, 234)',
+        'inversePrimary': 'rgb(255, 181, 152)',
         'elevation': {
             'level0': 'transparent',
-            'level1': 'rgb(248, 243, 242)',
-            'level2': 'rgb(244, 238, 235)',
-            'level3': 'rgb(241, 233, 227)',
-            'level4': 'rgb(239, 231, 224)',
-            'level5': 'rgb(237, 228, 219)'
+            'level1': 'rgb(251, 241, 242)',
+            'level2': 'rgb(248, 236, 235)',
+            'level3': 'rgb(245, 230, 227)',
+            'level4': 'rgb(244, 228, 224)',
+            'level5': 'rgb(243, 224, 219)'
         },
-        'surfaceDisabled': 'rgba(30, 27, 22, 0.12)',
-        'onSurfaceDisabled': 'rgba(30, 27, 22, 0.38)',
-        'backdrop': 'rgba(55, 47, 36, 0.4)'
+        'surfaceDisabled': 'rgba(32, 26, 24, 0.12)',
+        'onSurfaceDisabled': 'rgba(32, 26, 24, 0.38)',
+        'backdrop': 'rgba(59, 45, 40, 0.4)'
     }
 };
 const generatedDarkTheme = {
     'colors': {
-        'primary': 'rgb(253, 187, 20)',
-        'onPrimary': 'rgb(65, 45, 0)',
-        'primaryContainer': 'rgb(93, 66, 0)',
-        'onPrimaryContainer': 'rgb(255, 222, 164)',
-        'secondary': 'rgb(245, 190, 72)',
-        'onSecondary': 'rgb(64, 45, 0)',
-        'secondaryContainer': 'rgb(93, 66, 0)',
-        'onSecondaryContainer': 'rgb(255, 222, 163)',
-        'tertiary': 'rgb(147, 215, 134)',
-        'onTertiary': 'rgb(0, 58, 4)',
-        'tertiaryContainer': 'rgb(17, 82, 17)',
-        'onTertiaryContainer': 'rgb(174, 244, 160)',
+        'primary': 'rgb(255, 181, 152)',
+        'onPrimary': 'rgb(89, 28, 0)',
+        'primaryContainer': 'rgb(127, 43, 0)',
+        'onPrimaryContainer': 'rgb(255, 219, 206)',
+        'secondary': 'rgb(255, 184, 111)',
+        'onSecondary': 'rgb(74, 40, 0)',
+        'secondaryContainer': 'rgb(105, 60, 0)',
+        'onSecondaryContainer': 'rgb(255, 220, 190)',
+        'tertiary': 'rgb(77, 217, 230)',
+        'onTertiary': 'rgb(0, 54, 59)',
+        'tertiaryContainer': 'rgb(0, 79, 85)',
+        'onTertiaryContainer': 'rgb(132, 243, 255)',
         'error': 'rgb(255, 180, 171)',
         'onError': 'rgb(105, 0, 5)',
         'errorContainer': 'rgb(147, 0, 10)',
-        'onErrorContainer': 'rgb(255, 218, 214)',
-        'background': 'rgb(30, 27, 22)',
-        'onBackground': 'rgb(233, 225, 217)',
-        'surface': 'rgb(30, 27, 22)',
-        'onSurface': 'rgb(233, 225, 217)',
-        'surfaceVariant': 'rgb(78, 70, 57)',
-        'onSurfaceVariant': 'rgb(209, 197, 180)',
-        'outline': 'rgb(154, 143, 128)',
-        'outlineVariant': 'rgb(78, 70, 57)',
+        'onErrorContainer': 'rgb(255, 180, 171)',
+        'background': 'rgb(32, 26, 24)',
+        'onBackground': 'rgb(237, 224, 220)',
+        'surface': 'rgb(32, 26, 24)',
+        'onSurface': 'rgb(237, 224, 220)',
+        'surfaceVariant': 'rgb(83, 67, 62)',
+        'onSurfaceVariant': 'rgb(216, 194, 186)',
+        'outline': 'rgb(160, 141, 134)',
+        'outlineVariant': 'rgb(83, 67, 62)',
         'shadow': 'rgb(0, 0, 0)',
         'scrim': 'rgb(0, 0, 0)',
-        'inverseSurface': 'rgb(233, 225, 217)',
-        'inverseOnSurface': 'rgb(52, 48, 42)',
-        'inversePrimary': 'rgb(123, 88, 0)',
+        'inverseSurface': 'rgb(237, 224, 220)',
+        'inverseOnSurface': 'rgb(54, 47, 44)',
+        'inversePrimary': 'rgb(166, 59, 0)',
         'elevation': {
             'level0': 'transparent',
-            'level1': 'rgb(41, 35, 22)',
-            'level2': 'rgb(48, 40, 22)',
-            'level3': 'rgb(55, 45, 22)',
-            'level4': 'rgb(57, 46, 22)',
-            'level5': 'rgb(61, 49, 22)'
+            'level1': 'rgb(43, 34, 30)',
+            'level2': 'rgb(50, 38, 34)',
+            'level3': 'rgb(57, 43, 38)',
+            'level4': 'rgb(59, 45, 39)',
+            'level5': 'rgb(63, 48, 42)'
         },
-        'surfaceDisabled': 'rgba(233, 225, 217, 0.12)',
-        'onSurfaceDisabled': 'rgba(233, 225, 217, 0.38)',
-        'backdrop': 'rgba(54, 47, 36, 0.4)'
+        'surfaceDisabled': 'rgba(237, 224, 220, 0.12)',
+        'onSurfaceDisabled': 'rgba(237, 224, 220, 0.38)',
+        'backdrop': 'rgba(59, 45, 40, 0.4)'
     }
 };
 
 export const lightTheme: MD3Theme = {
     ...DefaultLightTheme,
-    ...generatedLightTheme,
-    colors: {
-        ...DefaultLightTheme,
-        ...generatedLightTheme.colors
-    }
+    // ...generatedLightTheme,
+    // colors: {
+    //     ...DefaultLightTheme,
+    //     ...generatedLightTheme.colors
+    // }
 };
 export const darkTheme: MD3Theme = {
     ...DefaultDarkTheme,
-    ...generatedDarkTheme,
-    colors: {
-        ...DefaultDarkTheme,
-        ...generatedDarkTheme.colors
-    }
+    // ...generatedDarkTheme,
+    // colors: {
+    //     ...DefaultDarkTheme,
+    //     ...generatedDarkTheme.colors
+    // }
 };
 
 export const lightNavTheme: Theme = {

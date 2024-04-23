@@ -2,9 +2,9 @@ import {createApi} from '@reduxjs/toolkit/query/react';
 import {axiosBaseQuery} from '@store/query/axios.query';
 import {ArticlesBrandsResponse} from '@store/query/articles/responses/articles-brands.response';
 import {ArticleInfoResponse} from '@store/query/articles/responses/article-info.response';
-import {ArticleInfoProp} from '@store/query/articles/article-info.prop';
 import * as SecureStore from 'expo-secure-store';
 import axios, {AxiosError} from 'axios';
+import {ItemModel} from '@shared/models/item.model';
 
 export const articlesApi = createApi({
     reducerPath: 'articlesApi',
@@ -17,16 +17,18 @@ export const articlesApi = createApi({
                 })
             }),
             // needs API admin info
-            info: build.query<ArticleInfoResponse, ArticleInfoProp>({
-                queryFn: async () => {
+            infoBatch: build.mutation<ArticleInfoResponse, ItemModel[]>({
+                queryFn: async (articles) => {
                     try {
                         const userlogin = await SecureStore.getItemAsync('apiLogin');
                         const userpsw = await SecureStore.getItemAsync('apiPass');
+                        const localUrl = process.env['EXPO_PUBLIC_LOCAL_API_URL'];
 
-                        const result = await axios.get('info', {
+                        const result = await axios.get<ArticleInfoResponse>(`${localUrl}/api/cp/articles/info`, {
                             params: {
                                 userlogin,
-                                userpsw
+                                userpsw,
+                                articles
                             }
                         });
                         return {data: result.data};
@@ -47,5 +49,4 @@ export const articlesApi = createApi({
 
 export const {
     useAllBrandsQuery,
-    useInfoQuery
 } = articlesApi;

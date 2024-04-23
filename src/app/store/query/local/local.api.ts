@@ -1,21 +1,26 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {axiosBaseQuery} from '@store/query/axios.query';
 import axios, {AxiosError} from 'axios';
-import {AdminDataResponse} from '@shared/responses/admin-data.response';
+import * as SecureStore from 'expo-secure-store';
+
 import {NetworkError} from '@shared/errors/network.error';
 import {UserState} from '@store/user/user-state.model';
+import {ArticleInfoResponse} from '@store/query/articles/responses/article-info.response';
+import {ArticleInfoProp} from '@store/query/articles/article-info.prop';
+import {SecureStoreConstants} from '@shared/consts';
 
 export const localApi = createApi({
     reducerPath: 'localApi',
     baseQuery: axiosBaseQuery({baseUrl: `${process.env.EXPO_PUBLIC_LOCAL_API_URL}/`, axiosInstance: axios}),
     endpoints(build) {
         return {
-            getAdminData: build.mutation<AdminDataResponse, {login: string, password: string}>({
-                query: ({login, password}) => ({
-                    url: 'getAdminData',
+            articleInfo: build.query<ArticleInfoResponse, ArticleInfoProp>({
+                query: (article) => ({
+                    url: 'articles/info',
                     params: {
-                        login,
-                        password
+                        login: SecureStore.getItem(SecureStoreConstants.userLogin),
+                        password: SecureStore.getItem(SecureStoreConstants.userPassword),
+                        ...article
                     }
                 })
             }),
@@ -49,6 +54,5 @@ export const localApi = createApi({
 });
 
 export const {
-    useGetAdminDataMutation,
     useCheckAuthMutation,
 } = localApi;
