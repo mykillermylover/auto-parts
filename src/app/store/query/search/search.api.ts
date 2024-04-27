@@ -8,6 +8,7 @@ import {
 import {SearchArticlesResponse} from './responses/articles.response';
 import {SearchHistoryResponse} from './responses/history.response';
 import {SearchTipsResponse} from './responses/tips.response';
+import {ItemModel} from '@shared/models/item.model';
 
 export const searchApi = createApi({
     reducerPath: 'searchApi',
@@ -26,7 +27,7 @@ export const searchApi = createApi({
                     return searchBrandsObjectToArray(baseQueryReturnValue);
                 }
             }),
-            searchArticles: build.query<SearchArticlesResponse, { number: number | string, brand: string }>({
+            searchArticles: build.query<SearchArticlesResponse, ItemModel>({
                 query: ({number, brand}) => ({
                     url: 'articles',
                     params: {
@@ -36,11 +37,21 @@ export const searchApi = createApi({
                     }
                 })
             }),
-            searchBatch: build.mutation<SearchArticlesResponse, { number: string, brand: string | number }[]>({
+            searchAddToHistory: build.mutation<SearchArticlesResponse, ItemModel>({
+                query: ({number, brand}) => ({
+                    url: 'articles',
+                    params: {
+                        number,
+                        brand
+                    }
+                })
+            }),
+            searchBatch: build.mutation<SearchArticlesResponse, ItemModel[]>({
                 query: (searchData) => ({
                     url: 'batch',
+                    method: 'post',
                     params: {
-                        searchData
+                        search: searchData
                     }
                 })
             }),
@@ -65,6 +76,7 @@ export const {
     useSearchBrandsQuery,
     useSearchArticlesQuery,
     useSearchBatchMutation,
+    useSearchAddToHistoryMutation,
     useSearchHistoryQuery,
     useSearchTipsQuery,
 } = searchApi;

@@ -29,12 +29,12 @@ export const AnimatedSearch = ({
     const {
         data: historyData = [],
         isFetching: isHistoryFetching,
-        isLoading: isHistoryLoading
-    } = useSearchHistoryQuery();
+        isLoading: isHistoryLoading,
+    } = useSearchHistoryQuery(undefined, {pollingInterval: 30_000, skipPollingIfUnfocused: true});
 
     const isLoading = isTipsFetching || isHistoryFetching || isTipsLoading || isHistoryLoading;
     const data = value ? tipsData : historyData;
-    const baseUrl = '/(tabs)/catalogue/article';
+    const baseUrl = '/(tabs)/home/search';
 
     return (
         <AnimatedSearchBase

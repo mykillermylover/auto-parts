@@ -46,6 +46,7 @@ export type ArticleInfoCross = ItemModel & {
     numberFix: string;
     crossType: 1 | 2 | 3 | 4 | 5;
     reliable: boolean;
+    images: ArticleInfoImage[];
 }
 export type ArticleInfoImage = {
     name: string;

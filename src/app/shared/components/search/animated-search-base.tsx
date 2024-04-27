@@ -1,13 +1,10 @@
 import {Divider, Searchbar} from 'react-native-paper';
-import React, {ReactNode} from 'react';
-import Animated, {Easing, interpolate, useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated';
-import {AnimatedSurface} from '@shared/components/animated-surface';
+import React, {ReactNode, useState} from 'react';
+import Animated, {interpolate, useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated';
 import {View} from 'react-native';
 
-const timingConfig = {
-    duration: 300,
-    easing: Easing.inOut(Easing.quad)
-};
+import {AnimatedSurface} from '@shared/components/animated-surface';
+import { AnimationConstants } from '@shared/consts';
 
 type AnimatedSearchBaseProps = {
     onFocus?: () => void;
@@ -18,6 +15,7 @@ type AnimatedSearchBaseProps = {
     children: ReactNode,
     loading?: boolean
 }
+const listHeightConst = 300;
 
 export function AnimatedSearchBase ({
     onFocus = () => {},
@@ -28,8 +26,7 @@ export function AnimatedSearchBase ({
     children,
     loading = false
 }: AnimatedSearchBaseProps) {
-
-    const listHeightConst = 300;
+    const [isActive, setIsActive] = useState(false);
 
     const listHeight = useSharedValue(0);
     const borderRadius = useSharedValue(30);
@@ -46,17 +43,19 @@ export function AnimatedSearchBase ({
     }));
 
     const handleFocus = () => {
-        borderRadius.value = withTiming(0, timingConfig,
+        setIsActive(true);
+        borderRadius.value = withTiming(0, AnimationConstants.timingConfig,
             () => {
-                listHeight.value = withTiming(listHeightConst, timingConfig);
+                listHeight.value = withTiming(listHeightConst, AnimationConstants.timingConfig);
             });
         onFocus();
     };
 
     const handleBlur = () => {
-        listHeight.value = withTiming(0, timingConfig,
+        setIsActive(false);
+        listHeight.value = withTiming(0, AnimationConstants.timingConfig,
             () => {
-                borderRadius.value = withTiming(30, timingConfig);
+                borderRadius.value = withTiming(30, AnimationConstants.timingConfig);
             });
         onBlur();
     };
@@ -81,6 +80,7 @@ export function AnimatedSearchBase ({
                     value={value}
                     onChangeText={setValue}
                     placeholder={placeholder}
+                    icon={isActive ? 'arrow-left' : undefined}
                 />
                 <Animated.View style={animatedDividerStyle}>
                     <Divider bold/>

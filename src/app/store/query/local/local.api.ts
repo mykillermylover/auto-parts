@@ -5,21 +5,22 @@ import * as SecureStore from 'expo-secure-store';
 
 import {NetworkError} from '@shared/errors/network.error';
 import {UserState} from '@store/user/user-state.model';
-import {ArticleInfoResponse} from '@store/query/articles/responses/article-info.response';
-import {ArticleInfoProp} from '@store/query/articles/article-info.prop';
-import {SecureStoreConstants} from '@shared/consts';
+import {ArticleInfo} from '@store/query/articles/responses/article-info.response';
+import {SearchConstants, SecureStoreConstants} from '@shared/consts';
+import {ItemModel} from '@shared/models/item.model';
 
 export const localApi = createApi({
     reducerPath: 'localApi',
-    baseQuery: axiosBaseQuery({baseUrl: `${process.env.EXPO_PUBLIC_LOCAL_API_URL}/`, axiosInstance: axios}),
+    baseQuery: axiosBaseQuery({baseUrl: `${process.env.EXPO_PUBLIC_LOCAL_API_URL}/api/`, axiosInstance: axios}),
     endpoints(build) {
         return {
-            articleInfo: build.query<ArticleInfoResponse, ArticleInfoProp>({
+            articleInfo: build.query<ArticleInfo, ItemModel>({
                 query: (article) => ({
                     url: 'articles/info',
                     params: {
                         login: SecureStore.getItem(SecureStoreConstants.userLogin),
                         password: SecureStore.getItem(SecureStoreConstants.userPassword),
+                        ...SearchConstants.defaultArticleProp,
                         ...article
                     }
                 })
@@ -54,5 +55,6 @@ export const localApi = createApi({
 });
 
 export const {
+    useArticleInfoQuery,
     useCheckAuthMutation,
 } = localApi;
