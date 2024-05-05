@@ -1,62 +1,39 @@
-import React, {useEffect} from 'react';
-import {Flex} from 'react-native-flex-layout';
-import {Card, Text} from 'react-native-paper';
-import {ItemModel} from '@shared/models/item.model';
+import React from 'react';
+import {ScrollView} from 'react-native';
+import {Button, Card, Text} from 'react-native-paper';
 import {useLocalSearchParams} from 'expo-router';
-import {FlashList} from '@shopify/flash-list';
-import {useArticleInfoQuery} from '@store/query/local/local.api';
-import {useSearchAddToHistoryMutation} from '@store/query/search/search.api';
-import Carousel from 'react-native-reanimated-carousel/src/Carousel';
-import {Dimensions} from 'react-native';
+
+import {ItemModel} from '@shared/models/item.model';
+import {useArticleInfoQuery} from "@store/query/local/local.api";
+import {FormattedArticleResponse} from "@shared/types/formatted-article.response";
+import {FlashList} from "@shopify/flash-list";
 
 export default function Search() {
     const item: ItemModel = useLocalSearchParams<{ brand: string, number: string }>();
 
-    const { data = {crosses: []}, refetch, isFetching } = useArticleInfoQuery(item);
-    const [addToHistory] = useSearchAddToHistoryMutation();
+    const { data = [] as FormattedArticleResponse[], error, refetch, isFetching } = useArticleInfoQuery(item);
 
-    useEffect(() => {
-        addToHistory(item);
-    }, []);
+    const imageUrlFull = 'https://pubimg.nodacdn.net/images/full';
 
     return (
-        <Flex fill>
+        <ScrollView>
+            <Text>
+                {!!error && JSON.stringify(error, null, 2)}
+            </Text>
+            <Text>
+                {isFetching && 'LOADING...'}
+            </Text>
             <FlashList
-                onRefresh={refetch}
-                refreshing={isFetching}
-                contentContainerStyle={{
-                    paddingHorizontal: 16,
-                }}
-                data={data.crosses}
+                data={data}
                 renderItem={({item}) => {
                     return (
-                        <Card style={{marginVertical: 16}}>
-                            {item.images &&
-                                <Carousel
-                                    loop={false}
-                                    vertical={false}
-                                    width={Dimensions.get('screen').width - 32}
-                                    height={200}
-                                    renderItem={({item}) => {
-                                        return (
-                                            <Card.Cover resizeMode={'contain'} source={{uri: item}}/>
-                                        );
-                                    }}
-                                    data={item.images.map(image =>
-                                        `https://pubimg.nodacdn.net/images/full/${image.name}`
-                                    )}
-                                />
-                            }
-                            <Card.Title title={item.brand} subtitle={item.number} />
-                            <Card.Content>
-                                <Text>
-                                    {item.reliable ? 'RELIABLE' : 'NOT RELIABLE'}
-                                </Text>
-                            </Card.Content>
+                        <Card>
+                            {/*<Card.Cover source={{uri: `${imageUrlFull}/${item.fastest}`}}/>*/}
                         </Card>
-                    );
+                    )
                 }}
             />
-        </Flex>
+            <Button onPress={refetch}>REFETCH</Button>
+        </ScrollView>
     );
 }

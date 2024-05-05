@@ -33,6 +33,13 @@ export default function TabLayout() {
                 }}
             />
             <MaterialBottomTabs.Screen
+                name='cart'
+                options={{
+                    title: 'Корзина',
+                    tabBarIcon: ({color}) => <Icon size={30} source='cart' color={color}/>,
+                }}
+            />
+            <MaterialBottomTabs.Screen
                 name='profile'
                 options={{
                     title: 'Профиль',

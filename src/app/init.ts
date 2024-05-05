@@ -4,14 +4,22 @@ import * as SecureStore from 'expo-secure-store';
 import appStore from '@store/app.store';
 import {InitActions} from '@store/init/init.store';
 import {SecureStoreConstants} from '@shared/consts';
+import {UserActions} from "@store/user/user.store";
+import {userApi} from "@store/query/user/user.api";
+import {UserState} from "@store/user/user-state.model";
 
 export default async function InitApp() {
-    const secureStoreData = await getUserAuthDataFromSecureStore();
-    const {login, pass} = secureStoreData;
+    const {login, pass} = await getUserAuthDataFromSecureStore();
 
-    if(login && pass) {
+    if (login && pass) {
         setHttpClientUserAuthData(login, pass);
         console.log('[Init] InitApp: HttpClient initialized  ');
+
+        const response: {
+            data?: UserState,
+            error?: unknown
+        } = await appStore.dispatch(userApi.endpoints.auth.initiate());
+        if (response.data) appStore.dispatch(UserActions.setUser(response.data));
     }
 
     appStore.dispatch(InitActions.setInitializedAction());
@@ -19,24 +27,15 @@ export default async function InitApp() {
 
 /**
  * init login and password from Storage
- * ### TODO: in prod build DELETE `.ENV ADMIN DATA`
  */
 async function getUserAuthDataFromSecureStore() {
-    const login = await SecureStore.getItemAsync(SecureStoreConstants.userLogin);// ?? process.env['EXPO_PUBLIC_ADMIN_LOGIN'];
-    const pass = await SecureStore.getItemAsync(SecureStoreConstants.userPassword);// ?? process.env['EXPO_PUBLIC_ADMIN_PASSWORD'];
-    const abcpLogin = await SecureStore.getItemAsync(SecureStoreConstants.abcpLogin);
-    const abcpPassword = await SecureStore.getItemAsync(SecureStoreConstants.abcpPassword);
-    const laximoLogin = await SecureStore.getItemAsync(SecureStoreConstants.laximoLogin);
-    const laximoPassword = await SecureStore.getItemAsync(SecureStoreConstants.laximoPassword);
+    const login = await SecureStore.getItemAsync(SecureStoreConstants.userLogin);
+    const pass = await SecureStore.getItemAsync(SecureStoreConstants.userPassword);
 
     console.log('[Init] getUserAuthDataFromSecureStore: got {login, pass} from SecureStore');
 
     return {
         login,
-        pass,
-        abcpLogin,
-        abcpPassword,
-        laximoLogin,
-        laximoPassword
+        pass
     };
 }

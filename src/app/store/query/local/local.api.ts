@@ -5,23 +5,24 @@ import * as SecureStore from 'expo-secure-store';
 
 import {NetworkError} from '@shared/errors/network.error';
 import {UserState} from '@store/user/user-state.model';
-import {ArticleInfo} from '@store/query/articles/responses/article-info.response';
-import {SearchConstants, SecureStoreConstants} from '@shared/consts';
+import {SecureStoreConstants} from '@shared/consts';
 import {ItemModel} from '@shared/models/item.model';
+import {localHttpClient} from "@httpClient";
+import {FormattedArticleResponse} from "@shared/types/formatted-article.response";
 
 export const localApi = createApi({
     reducerPath: 'localApi',
-    baseQuery: axiosBaseQuery({baseUrl: `${process.env.EXPO_PUBLIC_LOCAL_API_URL}/api/`, axiosInstance: axios}),
+    baseQuery: axiosBaseQuery({baseUrl: `api/`, axiosInstance: localHttpClient}),
     endpoints(build) {
         return {
-            articleInfo: build.query<ArticleInfo, ItemModel>({
-                query: (article) => ({
-                    url: 'articles/info',
+            articleInfo: build.query<FormattedArticleResponse[], ItemModel>({
+                query: ({brand, number}) => ({
+                    url: 'search/articles',
                     params: {
                         login: SecureStore.getItem(SecureStoreConstants.userLogin),
                         password: SecureStore.getItem(SecureStoreConstants.userPassword),
-                        ...SearchConstants.defaultArticleProp,
-                        ...article
+                        brand,
+                        number
                     }
                 })
             }),

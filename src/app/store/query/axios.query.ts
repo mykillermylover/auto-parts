@@ -3,7 +3,7 @@ import {BaseQueryFn} from '@reduxjs/toolkit/dist/query/react';
 import HttpClient from '@httpClient';
 import {NetworkError} from '@shared/errors/network.error';
 
-export const axiosBaseQuery =({baseUrl = '', axiosInstance = HttpClient}: { baseUrl: string, axiosInstance?: AxiosInstance }): BaseQueryFn<
+export const axiosBaseQuery =({baseUrl = '', axiosInstance = HttpClient}: { baseUrl?: string, axiosInstance?: AxiosInstance }): BaseQueryFn<
         {
             url: string
             method?: AxiosRequestConfig['method']
