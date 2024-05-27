@@ -1,14 +1,14 @@
-import {createApi} from '@reduxjs/toolkit/query/react';
-import {axiosBaseQuery} from '@store/query/axios.query';
-import {ArticlesBrandsResponse} from '@store/query/articles/responses/articles-brands.response';
-import {ArticleInfoResponse} from '@store/query/articles/responses/article-info.response';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { axiosBaseQuery } from '@store/query/axios.query';
+import { ArticlesBrandsResponse } from '@store/query/articles/responses/articles-brands.response';
+import { ArticleInfoResponse } from '@store/query/articles/responses/article-info.response';
 import * as SecureStore from 'expo-secure-store';
-import axios, {AxiosError} from 'axios';
-import {ItemModel} from '@shared/models/item.model';
+import axios, { AxiosError } from 'axios';
+import { ItemModel } from '@shared/models/item.model';
 
 export const articlesApi = createApi({
     reducerPath: 'articlesApi',
-    baseQuery: axiosBaseQuery({baseUrl: 'articles/'}),
+    baseQuery: axiosBaseQuery({ baseUrl: 'articles/' }),
     endpoints(build) {
         return {
             allBrands: build.query<ArticlesBrandsResponse, void>({
@@ -31,7 +31,7 @@ export const articlesApi = createApi({
                                 articles
                             }
                         });
-                        return {data: result.data};
+                        return { data: result.data };
                     } catch (axiosError) {
                         const err = axiosError as AxiosError;
                         return {

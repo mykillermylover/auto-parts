@@ -1,39 +1,61 @@
-import React from 'react';
-import {ScrollView} from 'react-native';
-import {Button, Card, Text} from 'react-native-paper';
-import {useLocalSearchParams} from 'expo-router';
+import React, { useCallback, useRef, useState } from 'react';
+import { useLocalSearchParams } from 'expo-router';
 
-import {ItemModel} from '@shared/models/item.model';
-import {useArticleInfoQuery} from "@store/query/local/local.api";
-import {FormattedArticleResponse} from "@shared/types/formatted-article.response";
-import {FlashList} from "@shopify/flash-list";
+import { ItemModel } from '@shared/models/item.model';
+import { useArticleInfoQuery } from '@store/query/local/local.api';
+import { FlashList } from '@shopify/flash-list';
+import { ArticleItem } from '@components/article-item';
+import { defaultArticleResponse } from '@shared/consts/search.const';
+import { Text } from 'react-native-paper';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { ArticleDetails } from '@shared/components/search/article-details.component';
+import { FormattedArticle } from '@shared/types/formatted-article.response';
+import { MaterialBottomSheetScrollView } from '@shared/components/bottom-sheet/material-bottom-sheet-scroll-view';
+
+const numColumns = 1;
 
 export default function Search() {
     const item: ItemModel = useLocalSearchParams<{ brand: string, number: string }>();
+    const { data = defaultArticleResponse, isFetching, refetch } = useArticleInfoQuery(item);
 
-    const { data = [] as FormattedArticleResponse[], error, refetch, isFetching } = useArticleInfoQuery(item);
+    const [currentItem, setCurrentItem] = useState(data.item);
 
-    const imageUrlFull = 'https://pubimg.nodacdn.net/images/full';
+    const bottomSheetRef = useRef<BottomSheet>(null);
+
+    const openBottomSheet = useCallback((value: FormattedArticle) => {
+        setCurrentItem(value);
+        bottomSheetRef.current?.snapToIndex(0);
+    },[]);
 
     return (
-        <ScrollView>
-            <Text>
-                {!!error && JSON.stringify(error, null, 2)}
-            </Text>
-            <Text>
-                {isFetching && 'LOADING...'}
-            </Text>
+        <>
             <FlashList
-                data={data}
-                renderItem={({item}) => {
-                    return (
-                        <Card>
-                            {/*<Card.Cover source={{uri: `${imageUrlFull}/${item.fastest}`}}/>*/}
-                        </Card>
-                    )
+                onRefresh={refetch}
+                refreshing={isFetching}
+                estimatedItemSize={450}
+                contentContainerStyle={{
+                    paddingVertical: 8
                 }}
+                numColumns={numColumns}
+                ListHeaderComponent={
+                    <>
+                        <Text>Искомый артикул:</Text>
+                        <ArticleItem onPress={() => openBottomSheet(data.item)} article={data.item}/>
+                        <Text>Аналоги:</Text>
+                    </>
+                }
+                data={data.crosses}
+                renderItem={({ item }) => <ArticleItem onPress={() => openBottomSheet(item)} numColumns={numColumns} article={item}/>}
             />
-            <Button onPress={refetch}>REFETCH</Button>
-        </ScrollView>
+
+            <MaterialBottomSheetScrollView
+                bottomSheetRef={bottomSheetRef}
+                snapPoints={[550]}
+                enablePanDownToClose
+                enableDynamicSizing
+            >
+                <ArticleDetails item={currentItem}/>
+            </MaterialBottomSheetScrollView>
+        </>
     );
 }

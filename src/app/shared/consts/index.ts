@@ -5,3 +5,4 @@ export * as FormConstants from './form.const';
 export * as SecureStoreConstants from './secure-store.const';
 export * as MaskConstants from './mask.const';
 export * as AnimationConstants from './animation.const';
+export * as AppConstants from './app.const';

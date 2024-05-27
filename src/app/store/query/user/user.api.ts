@@ -1,27 +1,27 @@
-import {createApi} from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
-import {UserState} from '@store/user/user-state.model';
-import {UserProp} from '@store/query/user/user.prop';
-import {NewUserResponse} from '@store/query/user/responses/user-new.response';
-import {SuccessResponse} from '@shared/responses/success.response';
-import {axiosBaseQuery} from '@store/query/axios.query';
-import {SecureStoreService} from '@services/secure-store.service';
-import {UserActions} from '@store/user/user.store';
+import { UserState } from '@store/user/user-state.model';
+import { UserProp } from '@store/query/user/user.prop';
+import { NewUserResponse } from '@store/query/user/responses/user-new.response';
+import { SuccessResponse } from '@shared/responses/success.response';
+import { axiosBaseQuery } from '@store/query/axios.query';
+import { SecureStoreService } from '@services/secure-store.service';
+import { UserActions } from '@store/user/user.store';
 
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: axiosBaseQuery({ baseUrl: 'user/' }),
     endpoints(build) {
         return {
-            newUser: build.mutation<NewUserResponse, UserProp>({
+            registration: build.mutation<NewUserResponse, UserProp>({
                 query: (user: UserProp) => ({
                     url: 'new',
                     method: 'post',
-                    params: {...user}
+                    params: { ...user }
                 })
             }),
             userActivation: build.mutation<NewUserResponse, { userCode: number, activationCode: string }>({
-                query: ({userCode, activationCode}) => ({
+                query: ({ userCode, activationCode }) => ({
                     url: 'activation',
                     method: 'post',
                     params: {
@@ -58,7 +58,7 @@ export const userApi = createApi({
                 })
             }),
             restorePasswordSecondStage: build.mutation<SuccessResponse, { passwordNew: string, code: string }>({
-                query: ({passwordNew, code}) => ({
+                query: ({ passwordNew, code }) => ({
                     url: 'restore',
                     method: 'post',
                     params: {
@@ -68,7 +68,7 @@ export const userApi = createApi({
                 })
             }),
             logout: build.mutation({
-                queryFn: async (args, {dispatch}) => {
+                queryFn: async (args, { dispatch }) => {
                     try {
                         await SecureStoreService.clearStore();
                         dispatch(UserActions.setUser(null));
@@ -87,7 +87,7 @@ export const userApi = createApi({
 });
 
 export const {
-    useNewUserMutation,
+    useRegistrationMutation,
     useUserActivationMutation,
     useAuthMutation,
     useRestorePasswordFirstStageMutation,

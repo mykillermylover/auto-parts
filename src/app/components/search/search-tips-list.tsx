@@ -1,31 +1,32 @@
-import {FlashList} from '@shopify/flash-list';
-import {HelperText} from 'react-native-paper';
-import {SearchListItem} from '@shared/components/search/search-list-item';
+import { FlashList } from '@shopify/flash-list';
+import { HelperText } from 'react-native-paper';
+import { SearchListItem } from '@shared/components/search/search-list-item';
 import React from 'react';
-import {SearchTip} from '@store/query/search/responses/tips.response';
+import { SearchTip } from '@store/query/search/responses/tips.response';
 
-type SearchTipsComponentProps = {
+interface SearchListProps {
     data: SearchTip[];
     searchUrl: string;
     isTip: boolean;
 }
 
-export const SearchTipsListComponent = ({
+export const SearchList = ({
     data,
     searchUrl,
     isTip
-}: SearchTipsComponentProps) => {
+}: SearchListProps) => {
 
     return (
 
-        <FlashList keyboardShouldPersistTaps='handled'
+        <FlashList 
+            keyboardShouldPersistTaps='handled'
             data={data}
-            ListEmptyComponent={<HelperText style={{alignSelf: 'center'}} type='info'>Нет результатов</HelperText>}
+            ListEmptyComponent={<HelperText style={{ alignSelf: 'center' }} type='info'>Нет результатов</HelperText>}
             estimatedItemSize={80}
             contentContainerStyle={{
                 paddingHorizontal: 10,
             }}
-            renderItem={({item: searchTip}) =>
+            renderItem={({ item: searchTip }) =>
                 <SearchListItem
                     href={{
                         pathname: searchUrl,

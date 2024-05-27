@@ -1,15 +1,15 @@
 import React from 'react';
-import {VStack} from 'react-native-flex-layout';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { VStack } from 'react-native-flex-layout';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, {
     useSharedValue,
     withTiming,
 } from 'react-native-reanimated';
-import {Card} from 'react-native-paper';
+import { Card } from 'react-native-paper';
 
-import {AnimatedSearch} from '@shared/components/search/animated-search';
-import {DismissKeyboardHOC} from '@shared/components/dismiss-keyboard.hoc';
-import {CarouselLeftAlign} from '@components/carousel-left-align';
+import { AnimatedSearch } from '@shared/components/search/animated-search';
+import { DismissKeyboardHOC } from '@shared/features/dismiss-keyboard.hoc';
+import { CarouselLeftAlign } from '@components/carousel-left-align';
 import { AnimationConstants } from '@shared/consts';
 
 const KeyboardDismissVStack = DismissKeyboardHOC(VStack);
@@ -37,10 +37,11 @@ export default function FirstHomeTab() {
                 }}
             >
                 <CarouselLeftAlign
+                    pagingEnabled={true}
                     data={[...new Array(6).keys()]}
-                    renderItem={({index}) => (
-                        <Card mode='contained' style={{flex: 1, marginLeft: 8, borderRadius: 35}}>
-                            <Card.Cover source={{uri: `https://source.unsplash.com/random/200x300?sig=${index}`}} />
+                    renderItem={({ index }) => (
+                        <Card mode='contained' style={{ flex: 1, marginLeft: 8, borderRadius: 35 }}>
+                            <Card.Cover source={{ uri: `https://source.unsplash.com/random/200x300?sig=${index}` }} />
                         </Card>
                     )}
                 />

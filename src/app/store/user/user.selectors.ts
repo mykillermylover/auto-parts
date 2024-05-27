@@ -1,10 +1,10 @@
-import {RootState} from '@store/store.type';
+import { RootState } from '@store/store.type';
 
 const UserSelectors = {
-    getUser: ({user}: RootState) => {
+    getUser: ({ user }: RootState) => {
         return user;
     },
-    isAuth: ({user}: RootState) => {
+    isAuth: ({ user }: RootState) => {
         return !!user;
     }
 

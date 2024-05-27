@@ -1,5 +1,5 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {initialUserState} from '@store/user/user.const';
+import { createSlice } from '@reduxjs/toolkit';
+import { initialUserState } from '@store/user/user.const';
 import userActions from '@store/user/user.actions';
 
 const userSlice = createSlice({

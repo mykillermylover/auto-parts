@@ -1,4 +1,4 @@
-import {CartPrepareItemModel} from '@shared/models/cart-prepare-item.model';
+import { CartPrepareItemModel } from '@shared/models/cart-prepare-item.model';
 
 export type SearchArticlesResponse = SearchArticle[];
 
@@ -35,4 +35,11 @@ export type SearchArticle = CartPrepareItemModel & {
     supplierColor?: string;
     // Описание поставщика
     supplierDescription: string;
+    // Метаданные
+    meta: {
+        deadlineReplace: string;
+        distributorCode: string;
+        noReturn: string;
+        supplierCode: string;
+    };
 }

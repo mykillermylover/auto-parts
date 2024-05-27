@@ -1,4 +1,4 @@
-export type UserResponse = {
+export interface UserResponse {
     // Идентификатор пользователя в системе ABCP.
     id: number;
     // Код пользователя.

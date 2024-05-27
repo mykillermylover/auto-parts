@@ -1,5 +1,5 @@
 
-export type NewUserResponse = {
+export interface NewUserResponse {
     status: number;
     userCode: number;
     activationCode: string;

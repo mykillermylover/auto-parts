@@ -1,5 +1,5 @@
-import {PayloadAction} from '@reduxjs/toolkit';
-import {UserState} from '@store/user/user-state.model';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { UserState } from '@store/user/user-state.model';
 
 /**
  * ### Actions example
