@@ -3,5 +3,5 @@ import {OrderResponse} from '@store/query/orders/response/order.response';
 
 export type OrderCartResponse = StatusResponse & {
     clientOrderNumber: number;
-    orders: OrderResponse[];
+    orders: Record<string, OrderResponse>;
 };

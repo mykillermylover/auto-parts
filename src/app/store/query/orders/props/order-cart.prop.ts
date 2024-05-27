@@ -1,4 +1,4 @@
-export type OrderCartProp = {
+export interface OrderCartProp {
     // Идентификатор способа оплаты.
     paymentMethod: number;
     // Идентификатор способа доставки.
@@ -12,7 +12,7 @@ export type OrderCartProp = {
     // Комментарий к заказу.
     comment: string;
     // Признак - оформить заказ целиком. Принимаемые значения - 0/1. По умолчанию - 0.
-    wholeOrderOnly: 0 | 1;
+    wholeOrderOnly?: 0 | 1;
     // Необязательный параметр - массив с номерами позиций заказа. Номера возвращает запрос basket/content
-    positionIds: number[];
+    positionIds?: number[];
 }

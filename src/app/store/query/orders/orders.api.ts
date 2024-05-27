@@ -1,16 +1,17 @@
-import {createApi} from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
-import {axiosBaseQuery} from '@store/query/axios.query';
-import {OrderCartResponse} from '@store/query/orders/response/order-cart.response';
-import {OrderInstantProp} from '@store/query/orders/props/order-instant.prop';
-import {OrderStatusesResponse} from '@store/query/orders/response/order-statuses.response';
-import {OrderListResponse} from '@store/query/orders/response/order-list.response';
-import {OrdersResponse} from '@store/query/orders/response/orders.response';
-import {OrdersConstants} from '../../../shared/consts';
+import { axiosBaseQuery } from '@store/query/axios.query';
+import { OrderCartResponse } from '@store/query/orders/response/order-cart.response';
+import { OrderInstantProp } from '@store/query/orders/props/order-instant.prop';
+import { OrderStatusesResponse } from '@store/query/orders/response/order-statuses.response';
+import { OrderListResponse } from '@store/query/orders/response/order-list.response';
+import { OrdersResponse } from '@store/query/orders/response/orders.response';
+import { OrdersConstants } from '../../../shared/consts';
+import { GetOrdersProp } from '@store/query/orders/props/get-orders.prop';
 
 export const ordersApi = createApi({
     reducerPath: 'ordersApi',
-    baseQuery: axiosBaseQuery({baseUrl: 'orders/'}),
+    baseQuery: axiosBaseQuery({ baseUrl: 'orders/' }),
 
     endpoints(build) {
         return {
@@ -45,9 +46,9 @@ export const ordersApi = createApi({
              * Допускается любое значение от **1** до **1000**.
              * *По умолчанию - **100**.*
              */
-            orders: build.query<OrdersResponse, {format: string, skip: number, limit: number}>({
+            orders: build.query<OrdersResponse, GetOrdersProp>({
                 query: ({
-                    format= OrdersConstants.detailedFormat,
+                    format = OrdersConstants.detailedFormat,
                     skip = OrdersConstants.ordersSkipNumber,
                     limit = OrdersConstants.ordersShownLimit
                 }) => ({
@@ -59,7 +60,7 @@ export const ordersApi = createApi({
                     }
                 })
             }),
-            orderCancelPosition: build.mutation<{message: string}, number>({
+            orderCancelPosition: build.mutation<{ message: string }, number>({
                 query: (positionId) => ({
                     url: 'cancelPosition',
                     method: 'post',
