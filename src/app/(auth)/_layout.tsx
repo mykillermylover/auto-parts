@@ -1,8 +1,8 @@
 import React from 'react';
-import {MaterialStack} from '@shared/components/material-stack';
-import {MaterialNavBar} from '@shared/components/material-navbar';
+import { MaterialStack } from '@shared/components/navigation/material-stack';
+import { MaterialNavBar } from '@shared/components/navigation/material-navbar';
 import { TransitionPresets } from '@react-navigation/stack';
-import {TransitionSpec} from '@react-navigation/stack/src/types';
+import { TransitionSpec } from '@react-navigation/stack/src/types';
 
 export default function AuthLayout() {
     return (
@@ -13,8 +13,8 @@ export default function AuthLayout() {
                 header: (props) => <MaterialNavBar {...props}/>
             }}
         >
-            <MaterialStack.Screen name='index' options={{title: 'Войти в аккаунт'}}/>
-            <MaterialStack.Screen name='register' options={{title: 'Регистрация'}}/>
+            <MaterialStack.Screen name='index' options={{ title: 'Войти в аккаунт' }}/>
+            <MaterialStack.Screen name='register' options={{ title: 'Регистрация' }}/>
         </MaterialStack>
     );
 }

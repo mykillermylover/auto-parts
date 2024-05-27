@@ -1,10 +1,10 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import RegisterForm from '@components/register-form/RegisterForm';
-import {FAB} from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import RegisterForm from '@components/register-form/register-form.component';
+import { FAB } from 'react-native-paper';
 import HideWithKeyboard from 'react-native-hide-with-keyboard';
-import {useExpoRouter} from 'expo-router/build/global-state/router-store';
+import { useExpoRouter } from 'expo-router/build/global-state/router-store';
 
 export default function RegisterComponent() {
 

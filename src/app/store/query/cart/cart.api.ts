@@ -1,20 +1,21 @@
-import {createApi} from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
-import {axiosBaseQuery} from '@store/query/axios.query';
-import {CartListResponse} from './responses/carts-list.response';
-import {OrderPositionModel} from '@shared/models/order-position.model';
-import {PositionsResponse} from './responses/positions.response';
-import {StatusResponse} from '@shared/responses/status.response';
-import {CartContentResponse} from './responses/cart-content.response';
-import {CartOptionsResponse} from './responses/options.response';
-import {CartDataItemResponse} from './responses/cart-data-item.response';
-import {ShipmentDatesResponse} from './responses/shipment-dates.response';
-import {OrderCartResponse} from '@store/query/orders/response/order-cart.response';
-import {OrderCartProp} from '@store/query/orders/props/order-cart.prop';
+import { axiosBaseQuery } from '@store/query/axios.query';
+import { CartListResponse } from './responses/carts-list.response';
+import { OrderPositionModel } from '@shared/models/order-position.model';
+import { StatusResponse } from '@shared/responses/status.response';
+import { CartContentResponse } from './responses/cart-content.response';
+import { CartOptionsResponse } from './responses/options.response';
+import { CartDataItemResponse } from './responses/cart-data-item.response';
+import { ShipmentDatesResponse } from './responses/shipment-dates.response';
+import { OrderCartResponse } from '@store/query/orders/response/order-cart.response';
+import { OrderCartProp } from '@store/query/orders/props/order-cart.prop';
+import { CartAddResponse } from '@store/query/cart/cart-add-response';
 
 export const cartApi = createApi({
     reducerPath: 'cartApi',
-    baseQuery: axiosBaseQuery({baseUrl: 'basket/'}),
+    baseQuery: axiosBaseQuery({ baseUrl: 'basket/' }),
+    tagTypes: ['CartContent'],
 
     endpoints(build) {
         return {
@@ -24,14 +25,15 @@ export const cartApi = createApi({
                 })
             }),
             // Удалять: добавить с количеством 0. Изменить количество (на меньшее): удалить, потом добавить
-            cartAddItems: build.mutation<PositionsResponse, OrderPositionModel[]>({
+            cartAddItems: build.mutation<CartAddResponse, OrderPositionModel[]>({
                 query: (positions) => ({
                     url: 'add',
                     method: 'post',
                     params: {
                         positions
                     }
-                })
+                }),
+                invalidatesTags: ['CartContent']
             }),
             orderCart: build.mutation<OrderCartResponse, OrderCartProp>({
                 query: (orderInfo) => ({
@@ -40,17 +42,21 @@ export const cartApi = createApi({
                     params: {
                         ...orderInfo
                     }
-                })
+                }),
+                invalidatesTags: ['CartContent']
             }),
             clearCart: build.mutation<StatusResponse, void>({
                 query: () => ({
-                    url: 'clear'
-                })
+                    url: 'clear',
+                    method: 'post'
+                }),
+                invalidatesTags: ['CartContent']
             }),
-            cartContent: build.query<CartContentResponse, void>({
+            cartContent: build.query<CartContentResponse[], void>({
                 query: () => ({
                     url: 'content'
-                })
+                }),
+                providesTags: ['CartContent']
             }),
             cartOptions: build.query<CartOptionsResponse, void>({
                 query: () => ({
@@ -77,8 +83,8 @@ export const cartApi = createApi({
              *
              * @param maxDeadlineTime - Максимальный срок поставки, в часах, среди всех позиций, которые собрались отправлять в заказ.
              */
-            cartShipmentDates: build.query<ShipmentDatesResponse, { minDeadlineTime: string, maxDeadlineTime: string }>({
-                query: ({minDeadlineTime, maxDeadlineTime}) => ({
+            cartShipmentDates: build.query<ShipmentDatesResponse, { minDeadlineTime: number, maxDeadlineTime: number }>({
+                query: ({ minDeadlineTime, maxDeadlineTime }) => ({
                     url: 'shipmentDates',
                     params: {
                         minDeadlineTime,
@@ -101,9 +107,9 @@ export const cartApi = createApi({
 export const {
     useCartsListQuery,
     useCartAddItemsMutation,
+    useCartContentQuery,
     useOrderCartMutation,
     useClearCartMutation,
-    useCartContentQuery,
     useCartOptionsQuery,
     useCartPaymentMethodsQuery,
     useCartShipmentMethodsQuery,

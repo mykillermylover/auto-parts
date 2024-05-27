@@ -36,6 +36,7 @@ export const PasswordTextInput = (props: LogicProps) => {
                 left={<TextInput.Icon icon={'lock'}/>}
                 right={<TextInput.Icon icon={passIcon} onPress={changePasswordVisibility}/>}
             />
+            {/* @ts-ignore */}
             {errorMessage && <HelperText type={'error'}>{errorMessage}</HelperText>}
         </Fragment>
     );

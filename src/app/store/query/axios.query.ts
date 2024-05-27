@@ -1,18 +1,18 @@
-import {AxiosError, AxiosInstance, AxiosRequestConfig} from 'axios';
-import {BaseQueryFn} from '@reduxjs/toolkit/dist/query/react';
+import { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import { BaseQueryFn } from '@reduxjs/toolkit/dist/query/react';
 import HttpClient from '@httpClient';
-import {NetworkError} from '@shared/errors/network.error';
+import { NetworkError } from '@shared/errors/network.error';
 
-export const axiosBaseQuery =({baseUrl = '', axiosInstance = HttpClient}: { baseUrl?: string, axiosInstance?: AxiosInstance }): BaseQueryFn<
-        {
-            url: string
-            method?: AxiosRequestConfig['method']
-            data?: AxiosRequestConfig['data']
-            params?: AxiosRequestConfig['params']
-            headers?: AxiosRequestConfig['headers']
-        }
-    > =>
-    async ({url, method, data, params, headers}) => {
+export const axiosBaseQuery =({ baseUrl = '', axiosInstance = HttpClient }: { baseUrl?: string, axiosInstance?: AxiosInstance }): BaseQueryFn<
+    {
+        url: string
+        method?: AxiosRequestConfig['method']
+        data?: AxiosRequestConfig['data']
+        params?: AxiosRequestConfig['params']
+        headers?: AxiosRequestConfig['headers']
+    }
+> =>
+    async ({ url, method, data, params, headers }) => {
         try {
             const result = await axiosInstance({
                 url: baseUrl + url,
@@ -21,7 +21,7 @@ export const axiosBaseQuery =({baseUrl = '', axiosInstance = HttpClient}: { base
                 params,
                 headers,
             });
-            return {data: result.data};
+            return { data: result.data };
         } catch (axiosError) {
             const err = axiosError as AxiosError;
             return {

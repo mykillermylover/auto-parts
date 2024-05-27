@@ -1,6 +1,6 @@
 export type CartListResponse = MultiBasketItem[];
 
-export type MultiBasketItem = {
+export interface MultiBasketItem {
     id: string;
     name: string;
 }

@@ -1,22 +1,24 @@
-import {createApi} from '@reduxjs/toolkit/query/react';
-import {axiosBaseQuery} from '@store/query/axios.query';
-import axios, {AxiosError} from 'axios';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { axiosBaseQuery } from '@store/query/axios.query';
+import axios, { AxiosError } from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-import {NetworkError} from '@shared/errors/network.error';
-import {UserState} from '@store/user/user-state.model';
-import {SecureStoreConstants} from '@shared/consts';
-import {ItemModel} from '@shared/models/item.model';
-import {localHttpClient} from "@httpClient";
-import {FormattedArticleResponse} from "@shared/types/formatted-article.response";
+import { NetworkError } from '@shared/errors/network.error';
+import { UserState } from '@store/user/user-state.model';
+import { SecureStoreConstants } from '@shared/consts';
+import { ItemModel } from '@shared/models/item.model';
+import { localHttpClient } from '@httpClient';
+import { FormattedArticleResponse } from '@shared/types/formatted-article.response';
+import { UserUpdateResponse } from '@store/query/local/responses/user-update.response';
+import { UserUpdateProp } from '@store/query/local/props/user-update.prop';
 
 export const localApi = createApi({
     reducerPath: 'localApi',
-    baseQuery: axiosBaseQuery({baseUrl: `api/`, axiosInstance: localHttpClient}),
+    baseQuery: axiosBaseQuery({ baseUrl: 'api/', axiosInstance: localHttpClient }),
     endpoints(build) {
         return {
-            articleInfo: build.query<FormattedArticleResponse[], ItemModel>({
-                query: ({brand, number}) => ({
+            articleInfo: build.query<FormattedArticleResponse, ItemModel>({
+                query: ({ brand, number }) => ({
                     url: 'search/articles',
                     params: {
                         login: SecureStore.getItem(SecureStoreConstants.userLogin),
@@ -26,8 +28,20 @@ export const localApi = createApi({
                     }
                 })
             }),
-            checkAuth: build.mutation<UserState, {login: string, password: string}>({
-                queryFn: async ({login, password}) => {
+            updateUser: build.mutation<UserUpdateResponse, UserUpdateProp>({
+                query: (user) => ({
+                    url: 'user/update',
+                    method: 'post',
+                    data: user
+                })
+            }),
+            // cartContent: build.query({
+            //     query: ({ brand, number }) => ({
+            //
+            //     })
+            // }),
+            checkAuth: build.mutation<UserState, { login: string, password: string }>({
+                queryFn: async ({ login, password }) => {
                     try {
                         const response = await axios.get<UserState>(`${process.env.EXPO_PUBLIC_API_URL}/user/info`,
                             {
@@ -50,12 +64,13 @@ export const localApi = createApi({
                     }
 
                 }
-            })
+            }),
         };
     }
 });
 
 export const {
     useArticleInfoQuery,
+    useUpdateUserMutation,
     useCheckAuthMutation,
 } = localApi;

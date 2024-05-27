@@ -1,20 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
-import {AdminDataResponse} from '@shared/responses/admin-data.response';
-import {SecureStoreConstants} from '@shared/consts';
-import isAnyItemNull from '@shared/features/isAnyItemNull.function';
+import { SecureStoreConstants } from '@shared/consts';
 
 export class SecureStoreService {
-
-    public static async setAdminData({abcp, laximo}: AdminDataResponse) {
-        await Promise.all([
-            SecureStore.setItemAsync(SecureStoreConstants.abcpLogin, abcp.login),
-            SecureStore.setItemAsync(SecureStoreConstants.abcpPassword, abcp.password),
-            SecureStore.setItemAsync(SecureStoreConstants.laximoLogin, laximo.login),
-            SecureStore.setItemAsync(SecureStoreConstants.laximoPassword, laximo.password)
-        ]);
-
-        console.log('[SecureStoreService] setAdminData: admin data set');
-    }
 
     public static async setUserData(login: string, passwordHash: string) {
         await Promise.all([
@@ -25,41 +12,8 @@ export class SecureStoreService {
         console.log('[SecureStoreService] setUserData: user data set');
     }
 
-    public static async getAdminData() {
-        const [
-            abcpLogin,
-            abcpPassword,
-            laximoLogin,
-            laximoPassword
-        ] = await Promise.all([
-            SecureStore.getItemAsync(SecureStoreConstants.abcpLogin),
-            SecureStore.getItemAsync(SecureStoreConstants.abcpPassword),
-            SecureStore.getItemAsync(SecureStoreConstants.laximoLogin),
-            SecureStore.getItemAsync(SecureStoreConstants.laximoPassword)
-        ]);
-
-        if (isAnyItemNull(abcpLogin, abcpPassword, laximoLogin, laximoPassword)) {
-            throw new Error('[SecureStoreService] getAdminData: Необходимые данные не инициализированы!');
-        }
-
-        const result: AdminDataResponse = {
-            abcp: {
-                password: abcpPassword!,
-                login: abcpLogin!
-            },
-            laximo: {
-                password: laximoPassword!,
-                login: laximoLogin!
-            }
-        };
-        return result;
-    }
-
     public static async clearStore() {
-        await Promise.all([
-            this.clearAdminData(),
-            this.clearUserData()
-        ]);
+        await this.clearUserData();
 
         console.log('[SecureStoreService] clearStore: store cleared');
     }
@@ -73,14 +27,18 @@ export class SecureStoreService {
         console.log('[SecureStoreService] clearUserData: userData cleared');
     }
 
-    public static async clearAdminData() {
-        await Promise.all([
-            SecureStore.deleteItemAsync(SecureStoreConstants.abcpLogin),
-            SecureStore.deleteItemAsync(SecureStoreConstants.abcpPassword),
-            SecureStore.deleteItemAsync(SecureStoreConstants.laximoLogin),
-            SecureStore.deleteItemAsync(SecureStoreConstants.laximoPassword)
-        ]);
+    /**
+     * init login and password from Storage
+     */
+    public static async getUserAuthData() {
+        const login = await SecureStore.getItemAsync(SecureStoreConstants.userLogin)
+        const pass = await SecureStore.getItemAsync(SecureStoreConstants.userPassword)
 
-        console.log('[SecureStoreService] clearAdminData: adminData cleared');
+        console.log('[Init] getUserAuthDataFromSecureStore: got {login, pass} from SecureStore')
+
+        return {
+            login,
+            pass,
+        }
     }
 }

@@ -1,12 +1,12 @@
-import React, {useRef} from 'react';
-import {ICarouselInstance} from 'react-native-reanimated-carousel';
-import {Dimensions} from 'react-native';
-import Carousel from 'react-native-reanimated-carousel/src/Carousel';
-import {type TCarouselProps} from 'react-native-reanimated-carousel/src/types';
+import React, { useRef } from 'react';
+import { ICarouselInstance } from 'react-native-reanimated-carousel';
+import { Dimensions } from 'react-native';
+import Carousel from 'react-native-reanimated-carousel';
+import { type TCarouselProps } from 'react-native-reanimated-carousel/src/types';
 
 const PAGE_WIDTH = Dimensions.get('screen').width;
 
-type CarouselLeftAlignProps = {
+interface CarouselLeftAlignProps {
     data: TCarouselProps['data'];
     loop?: boolean;
     autoPlay?: boolean;
@@ -21,7 +21,6 @@ export const CarouselLeftAlign = ({
     renderItem,
     pagingEnabled = false
 }: CarouselLeftAlignProps) => {
-    const ref =useRef<ICarouselInstance>(null);
 
     const baseOptions = {
         vertical: false,
@@ -33,8 +32,7 @@ export const CarouselLeftAlign = ({
         <Carousel
             {...baseOptions}
             loop={loop}
-            ref={ref}
-            style={{width: '100%'}}
+            style={{ width: '100%' }}
             autoPlay={autoPlay}
             data={data}
             pagingEnabled={pagingEnabled}

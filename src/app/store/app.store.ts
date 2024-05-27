@@ -1,16 +1,17 @@
-import {configureStore} from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './user/user.store';
 import initReducer from './init/init.store';
-import {userApi} from '@store/query/user/user.api';
-import {cartApi} from '@store/query/cart/cart.api';
-import {ordersApi} from '@store/query/orders/orders.api';
-import {searchApi} from '@store/query/search/search.api';
-import {articlesApi} from '@store/query/articles/articles.api';
-import {carTreeApi} from '@store/query/car-tree/car-tree.api';
-import {garageApi} from '@store/query/garage/garage.api';
-import {advicesApi} from '@store/query/advices/advices.api';
-import {localApi} from '@store/query/local/local.api';
-import {createLogger} from 'redux-logger';
+import tabBarReducer from './tab-bar/tab-bar.store';
+import { userApi } from '@store/query/user/user.api';
+import { cartApi } from '@store/query/cart/cart.api';
+import { ordersApi } from '@store/query/orders/orders.api';
+import { searchApi } from '@store/query/search/search.api';
+import { articlesApi } from '@store/query/articles/articles.api';
+import { carTreeApi } from '@store/query/car-tree/car-tree.api';
+import { garageApi } from '@store/query/garage/garage.api';
+import { advicesApi } from '@store/query/advices/advices.api';
+import { localApi } from '@store/query/local/local.api';
+import { createLogger } from 'redux-logger';
 
 const logger = createLogger({
     predicate: (getState, action) => !/[a-zA-Z]*Api\/config\/middlewareRegistered/.test(action.type)
@@ -32,6 +33,7 @@ const store = configureStore({
     reducer: {
         user: userReducer,
         init: initReducer,
+        tabBar: tabBarReducer,
 
         [userApi.reducerPath]: userApi.reducer,
         [cartApi.reducerPath]: cartApi.reducer,
@@ -43,7 +45,7 @@ const store = configureStore({
         [garageApi.reducerPath]: garageApi.reducer,
         [localApi.reducerPath]: localApi.reducer,
     },
-    middleware: (gDF) => gDF().concat(...middlewares, logger),
+    middleware: (gDF) => gDF().concat(...middlewares),
 });
 
 export default store;

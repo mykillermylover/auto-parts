@@ -1,10 +1,10 @@
-import {FormBuilderConfigArray} from '@shared/types/form-builder-config-array.type';
-import {MaskedTextInput} from '@shared/components/inputs/masked-text-input';
+import { FormBuilderConfigArray } from '@shared/types/form-builder-config-array.type';
+import { MaskedTextInput } from '@shared/components/inputs/masked-text-input';
 import React from 'react';
 import { MaskConstants } from '@shared/consts';
-import {FieldErrors} from 'react-hook-form';
+import { MaterialDateInput } from '@shared/components/inputs/material-date-input';
 
-export type RegisterFormValues = {
+export interface RegisterFormValues {
     lastname: string,
     name: string,
     patronymic: string,
@@ -128,12 +128,17 @@ export const registerRetailConfig: FormBuilderConfigArray = [
         }
     },
     {
-        type: 'text',
+        type: 'custom',
         name: 'birthDate',
 
-        textInputProps: {
-            label: 'Дата рождения',
-        }
+        rules: {
+            required: {
+                value: true,
+                message: 'Введите дату рождения'
+            }
+        },
+
+        JSX: props => <MaterialDateInput props={props}/>
     },
     {
         type: 'text',

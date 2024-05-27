@@ -1,4 +1,4 @@
-export type ItemModel = {
+export interface ItemModel {
     brand: string,
     number: number | string
 }

@@ -1,7 +1,7 @@
 import React from 'react';
-import {MaterialStack} from '@shared/components/material-stack';
-import {MaterialNavBar} from '@shared/components/material-navbar';
-import {TransitionPresets} from '@react-navigation/stack';
+import { MaterialStack } from '@shared/components/navigation/material-stack';
+import { TransitionPresets } from '@react-navigation/stack';
+import { MaterialNavBar } from '@shared/components/navigation/material-navbar';
 
 export default function HomeLayout() {
     return (
@@ -15,7 +15,7 @@ export default function HomeLayout() {
             <MaterialStack.Screen
                 name='index'
                 options={{
-                    title: 'Главная'
+                    title: 'Главная',
                 }}
             />
             <MaterialStack.Screen

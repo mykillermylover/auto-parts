@@ -1,9 +1,6 @@
-import {MD3Theme} from 'react-native-paper/lib/typescript/types';
-import {
-    MD3LightTheme as DefaultLightTheme,
-    MD3DarkTheme as DefaultDarkTheme
-} from 'react-native-paper';
-import {Theme} from '@react-navigation/native';
+import { MD3Theme } from 'react-native-paper/lib/typescript/types';
+import { MD3DarkTheme as DefaultDarkTheme, MD3LightTheme as DefaultLightTheme } from 'react-native-paper';
+import { Theme } from '@react-navigation/native';
 
 // generated themes
 const generatedLightTheme = {

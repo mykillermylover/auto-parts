@@ -1,5 +1,5 @@
-import {AbcpError} from '@shared/errors/abcp.error';
-import {NetworkError} from '@shared/errors/network.error';
+import { AbcpError } from '@shared/errors/abcp.error';
+import { NetworkError } from '@shared/errors/network.error';
 
 export class ResponseService {
     public static getErrorMessage(error: NetworkError) {
@@ -7,7 +7,7 @@ export class ResponseService {
         if(typeof data === 'string') {
             return data;
         }
-        const {errorMessage} = data as AbcpError;
+        const { errorMessage } = data as AbcpError;
         const code = error.status;
 
         if(errorMessage) {

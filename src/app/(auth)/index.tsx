@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {HStack, VStack} from 'react-native-flex-layout';
-import LoginForm from '@components/login-form/LoginForm';
+import LoginForm from '@components/login-form/login-form.component';
 import {Button, Text} from 'react-native-paper';
 import {Link} from 'expo-router';
 import HideWithKeyboard from 'react-native-hide-with-keyboard';
