@@ -1,5 +1,5 @@
 import Toast from 'react-native-toast-message';
-import {MD3Theme} from 'react-native-paper/lib/typescript/types';
+import { MD3Theme } from 'react-native-paper/lib/typescript/types';
 
 export class ToastService {
     static theme: MD3Theme;

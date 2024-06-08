@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { APP_MARGIN } from '@shared/consts/app.const';
 import { Text, useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
@@ -6,14 +6,15 @@ import { getNoun } from '@shared/features/get-noun';
 import { HStack, VStack } from 'react-native-flex-layout';
 import { OrderCheckoutLink } from '@components/cart/order-checkout-link';
 import { ShadowedView, shadowStyle } from 'react-native-fast-shadow';
-import { CartContentMeta } from '@shared/types/cart-content-meta';
+import { useAppSelector } from '@shared/hooks';
+import CartSelectors from '@store/cart/cart.selectors';
 
-interface CartFooterProps {
-    itemsNumber: number;
-    total: number;
-    dataIds: string[];
-}
-export const CartFooter = ({ itemsNumber, total, dataIds}: CartFooterProps) => {
+export const CartFooter = () => {
+
+    const order = useAppSelector(CartSelectors.getCurrentOrder);
+
+    const itemsNumber = useMemo(() => order.reduce((prev, curr) => prev + +curr.quantity, 0), [order])
+    const total = useMemo(() => order.reduce((prev, curr) => prev + curr.quantity * curr.price, 0), [order])
 
     const getPositionsNoun = useCallback((items: number) => {
         const left = getNoun('Будет заказан', 'Будут заказаны', 'Будут заказаны', items);
@@ -46,7 +47,7 @@ export const CartFooter = ({ itemsNumber, total, dataIds}: CartFooterProps) => {
                         </Text>
                     </VStack>
 
-                    <OrderCheckoutLink dataIds={dataIds} />
+                    <OrderCheckoutLink />
                 </HStack>
             </View>
         </ShadowedView>

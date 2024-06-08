@@ -9,7 +9,7 @@ interface QuantityButtonsProps {
     value: number;
     setValue: (value: number) => void;
     input: string;
-    oninput: (value: string) => void;
+    onInput: (value: string) => void;
 }
 export const QuantityButtons = (
     {
@@ -18,7 +18,7 @@ export const QuantityButtons = (
         value,
         setValue,
         input,
-        oninput
+        onInput
     }: QuantityButtonsProps) => {
     const theme = useTheme();
 
@@ -33,7 +33,7 @@ export const QuantityButtons = (
         else if (newValue < quantityMultiplier)
             newValue = quantityMultiplier;
 
-        oninput(newValue.toString());
+        onInput(newValue.toString());
         setValue(newValue);
     }
 
@@ -54,7 +54,7 @@ export const QuantityButtons = (
                 mode='outlined'
                 keyboardType='numeric'
                 value={input}
-                onChangeText={oninput}
+                onChangeText={onInput}
                 onEndEditing={() => handleChange(parseInt(input))}
             />
             <IconButton

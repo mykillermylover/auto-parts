@@ -2,6 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './user/user.store';
 import initReducer from './init/init.store';
 import tabBarReducer from './tab-bar/tab-bar.store';
+import cartReducer from './cart/cart.store';
+import ordersReducer from './orders/orders.store';
 import { userApi } from '@store/query/user/user.api';
 import { cartApi } from '@store/query/cart/cart.api';
 import { ordersApi } from '@store/query/orders/orders.api';
@@ -34,6 +36,8 @@ const store = configureStore({
         user: userReducer,
         init: initReducer,
         tabBar: tabBarReducer,
+        cart: cartReducer,
+        orders: ordersReducer,
 
         [userApi.reducerPath]: userApi.reducer,
         [cartApi.reducerPath]: cartApi.reducer,

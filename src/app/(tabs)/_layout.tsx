@@ -13,7 +13,7 @@ export default function TabLayout() {
     return (
         <MaterialBottomTabs
             barStyle={{
-                height: isTabBarVisible ? undefined : 0,
+                display: isTabBarVisible ? 'flex' : 'none',
             }}
             theme={theme}
             sceneAnimationType='shifting'

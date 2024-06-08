@@ -1,4 +1,4 @@
-import { Button, Card, Divider, HelperText, Text, TouchableRipple } from 'react-native-paper';
+import { Button, Card, CardProps, Divider, HelperText, Text, TouchableRipple } from 'react-native-paper';
 import React, { useMemo } from 'react';
 import { FormattedArticle } from '@shared/types/formatted-article.response';
 import { Dimensions } from 'react-native';
@@ -8,6 +8,7 @@ import { AppConstants } from '@shared/consts';
 interface ArticleItemProps {
     article: FormattedArticle;
     onPress?: (() => void) | void;
+    containerStyle?: CardProps['style'];
 }
 
 const MARGIN = AppConstants.APP_MARGIN;
@@ -17,7 +18,8 @@ export const ArticleItem = (
     {
         article,
         onPress = () => {},
-        numColumns = 1
+        numColumns = 1,
+        containerStyle
     }: ArticleItemProps & { numColumns?: number }) => {
 
 
@@ -28,10 +30,13 @@ export const ArticleItem = (
 
     return (
         <Card
-            style={{
-                marginVertical: MARGIN / 2,
-                marginHorizontal: MARGIN
-            }}
+            style={[
+                {
+                    marginVertical: MARGIN / 2,
+                    marginHorizontal: MARGIN
+                },
+                containerStyle
+            ]}
         >
             <ArticleCardCover
                 images={images}

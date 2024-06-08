@@ -15,6 +15,7 @@ import { ToastService } from '@services/toast.service';
 import { NetworkError } from '@shared/errors/network.error';
 import md5 from 'md5';
 import { setHttpClientUserAuthData } from '@httpClient';
+import { APP_MARGIN } from '@shared/consts/app.const';
 
 const UserUpdateForm = () => {
 
@@ -45,7 +46,7 @@ const UserUpdateForm = () => {
     }
 
     return (
-        <VStack m={16}>
+        <VStack mh={APP_MARGIN * 2}>
             <FormBuilder
                 formConfigArray={userUpdateFormConfig}
                 control={control}

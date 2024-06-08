@@ -18,9 +18,6 @@ export default function Index() {
     const dispatch = useAppDispatch();
 
     const bottomSheetRef = useRef<BottomSheet>(null);
-    const handleSheetChanges = useCallback((index: number) => {
-        console.log('handleSheetChanges', index);
-    }, []);
 
     if (!user || isLoading) {
         return (
@@ -50,7 +47,7 @@ export default function Index() {
                         }}
                         onPress={() => {
                             dispatch(TabBarActions.hideTabBar());
-                            bottomSheetRef.current?.snapToIndex(0)
+                            setTimeout(() => bottomSheetRef.current?.snapToIndex(0), 200);
                         }}
                         label={'Редактировать'}
                     />
@@ -61,7 +58,6 @@ export default function Index() {
                 snapPoints={[400, '90%']}
                 onClose={() => dispatch(TabBarActions.showTabBar())}
                 bottomSheetRef={bottomSheetRef}
-                onChange={handleSheetChanges}
             >
                 <UserUpdateForm/>
             </MaterialBottomSheetView>

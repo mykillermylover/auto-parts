@@ -22,12 +22,12 @@ import { UserState } from '@store/user/user-state.model';
  * ```
  */
 const userActions = {
-    setName: (state: UserState, action: PayloadAction<string>) => {
+    setName: (state: UserState, { payload }: PayloadAction<string>) => {
         if (state)
-            state.name = action.payload;
+            state.name = payload;
     },
-    setUser: (state: UserState, action: PayloadAction<UserState>) => {
-        return action.payload;
+    setUser: (state: UserState, { payload }: PayloadAction<UserState>) => {
+        return payload;
     }
 };
 

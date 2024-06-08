@@ -15,4 +15,5 @@ export type OrderResponse = Omit<OrderListItem, 'statusId' | 'positions'> & {
 export type OrdersPosition = Omit<OrderPositionResponse, 'statusId' > & {
     // Заказываемое количество
     quantityOrdered: number;
+    statusColor: string;
 }

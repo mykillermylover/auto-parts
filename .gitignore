@@ -329,6 +329,7 @@ google-services.json
 
 expo-env.d.ts
 # @end expo-cli
+eslint.config.mjs
 /.eslintrc.json
 /%ProgramData%/Microsoft/Windows/UUS/State/_active.uusver
 /eas.json

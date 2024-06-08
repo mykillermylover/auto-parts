@@ -35,11 +35,6 @@ export const localApi = createApi({
                     data: user
                 })
             }),
-            // cartContent: build.query({
-            //     query: ({ brand, number }) => ({
-            //
-            //     })
-            // }),
             checkAuth: build.mutation<UserState, { login: string, password: string }>({
                 queryFn: async ({ login, password }) => {
                     try {

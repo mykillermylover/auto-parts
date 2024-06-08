@@ -38,7 +38,7 @@ export const MaterialBottomSheetView = (
                 translucentBackground={translucentBackground}
                 onChange={onChange}
             >
-                <BottomSheetView style={{ marginTop: 32, flex: 1 }}>
+                <BottomSheetView style={{ flex: 1 }}>
                     {children}
                 </BottomSheetView>
             </MaterialBottomSheetBase>

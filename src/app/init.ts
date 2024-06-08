@@ -6,13 +6,14 @@ import { userApi } from '@store/query/user/user.api'
 import { UserState } from '@store/user/user-state.model'
 import { registerTranslation, ru } from 'react-native-paper-dates';
 import { SecureStoreService } from '@services/secure-store.service';
+import { RehydrateData } from '@shared/features/rehydrate-data';
 
 export default async function InitApp() {
     const { login, pass } = await SecureStoreService.getUserAuthData()
 
     if (login && pass) {
         setHttpClientUserAuthData(login, pass)
-        console.log('[Init] InitApp: HttpClient initialized  ')
+        console.log('[Init] InitApp: HttpClient initialized')
 
         const response: {
             data?: UserState
@@ -24,6 +25,7 @@ export default async function InitApp() {
 
     registerTranslation('ru', ru);
 
+    await RehydrateData();
+
     appStore.dispatch(InitActions.setInitializedAction())
 }
-

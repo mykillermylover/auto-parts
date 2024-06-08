@@ -4,9 +4,9 @@ import { IconButton, useTheme } from 'react-native-paper';
 import React, { RefObject, useCallback, useState } from 'react';
 import { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { BottomSheetViewProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetView/types';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { APP_MARGIN } from '@shared/consts/app.const';
 
-type MaterialBottomSheetBaseProps = Omit<BottomSheetProps, 'children'> & {
+export type MaterialBottomSheetBaseProps = Omit<BottomSheetProps, 'children'> & {
     bottomSheetRef: RefObject<BottomSheetMethods>,
     children: BottomSheetViewProps['children'],
     closeButton?: boolean,
@@ -16,23 +16,22 @@ type MaterialBottomSheetBaseProps = Omit<BottomSheetProps, 'children'> & {
 export const MaterialBottomSheetBase = (
     {
         bottomSheetRef,
-        translucentBackground,
+        translucentBackground = true,
         enableDynamicSizing,
         enablePanDownToClose,
         children,
-        index,
+        index = -1,
         onClose,
-        closeButton,
+        closeButton = true,
         snapPoints,
         onAnimate,
         onChange,
+        ...props
     }: MaterialBottomSheetBaseProps
 ) => {
 
     const theme = useTheme();
     const [backgroundVisibility, setBackgroundVisibility] = useState(false);
-
-    const { top } = useSafeAreaInsets();
 
     const hide = useCallback(() => {
         bottomSheetRef.current?.close();
@@ -55,9 +54,6 @@ export const MaterialBottomSheetBase = (
                 />
             }
             <BottomSheet
-                style={{
-                    marginTop: top
-                }}
                 enableDynamicSizing={enableDynamicSizing}
                 enablePanDownToClose={enablePanDownToClose}
                 index={index}
@@ -65,7 +61,7 @@ export const MaterialBottomSheetBase = (
                 handleComponent={closeButton ? (props) => {
                     return (
                         <>
-                            <BottomSheetHandle {...props} />
+                            <BottomSheetHandle {...props} style={{ marginBottom: APP_MARGIN * 4 }} />
                             <IconButton
                                 style={{
                                     position: 'absolute',
@@ -90,6 +86,7 @@ export const MaterialBottomSheetBase = (
                         onAnimate(fromIndex, toIndex);
                     }
                 }}
+                {...props}
             >
                 {children}
             </BottomSheet>

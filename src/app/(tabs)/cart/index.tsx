@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CartItem } from '@components/cart/cart-item';
 import { KeyboardAvoidingView } from 'react-native';
@@ -8,123 +8,136 @@ import { CartHeader } from '@components/cart/cart-header';
 import { CartFooter } from '@components/cart/cart-footer';
 import { CartEmpty } from '@components/cart/cart-empty';
 import { MaterialActivityIndicator } from '@shared/components/material-activity-indicator';
-import { assignCartData } from '@shared/features/assign-cart-data';
 import { FlashList } from '@shopify/flash-list';
-import { AsyncStorageService } from '@services/async-storage.service';
-import { CartContentWithMeta } from '@shared/types/cart-content-with-meta';
 import { useNavigation } from 'expo-router';
+import { useAppDispatch, useAppSelector } from '@shared/hooks';
+import { CartActions } from '@store/cart/cart.store';
+import CartSelectors from '@store/cart/cart.selectors';
+import { CartContentMeta } from '@shared/types/cart-content-meta';
+import { CartContentResponse } from '@store/query/cart/responses/cart-content.response';
+import { ResponseService } from '@services/response.service';
+import { NetworkError } from '@shared/errors/network.error';
+import { PersistCart } from '@shared/features/persist-data';
 
 export default function Cart() {
     const navigation = useNavigation();
-    const [assignedData, setAssignedData] = useState<CartContentWithMeta[]>([]);
+    const dispatch = useAppDispatch();
+    const metaData = useAppSelector(CartSelectors.getCart);
 
-    const { currentData: data = [], isFetching, isLoading, refetch } = useCartContentQuery();
+    const { data = [], isFetching, isLoading, refetch } = useCartContentQuery();
+
     const [addItems] = useCartAddItemsMutation();
     const [clearCart] = useClearCartMutation();
 
-    const total = useMemo(() => assignedData.reduce(
-        (prev, curr) => {
-            const add = curr.checked ? curr.price * curr.quantity : 0;
-            return prev + add;
-        }, 0
-    ), [assignedData]);
-    const itemsNumber = useMemo(() => assignedData.reduce(
-        (prev, curr) => {
-            const add = curr.checked ? +curr.quantity : 0;
-            return prev + add;
-        }, 0
-    ), [assignedData])
-    const itemIds = useMemo(() =>
-        assignedData.map(
-            item => item.positionId.toString()
-        ), [data, assignedData]);
-    const filteredIds = useMemo(() =>
-        assignedData.filter(
-            item => item.checked).map(item => item.positionId.toString()
-        ), [data, assignedData]);
-
-    const clearStorageCartInfo = useCallback(() => AsyncStorageService.multiRemove(itemIds), [assignedData])
-    const applyChanges = useCallback(async () => {
-        if (!data.length) {
-            setAssignedData([]);
-            return;
+    const clearCartState = useCallback(() => dispatch(CartActions.setCartItems([])), [])
+    const createNewMetaItem = useCallback((item: CartContentResponse): CartContentMeta => {
+        return {
+            ...item,
+            images: [],
+            availability: item.quantity,
+            checked: true
         }
+    }, []);
+
+    const changeCartQuantities = useCallback(async (newItems: CartContentResponse[]) => {
         try {
-            console.log('[Cart] applyChanges: start');
-            console.log('[Cart] applyChanges: data.length', data.length, 'assignedData.length', assignedData.length);
-
-            const changedItems = assignedData.filter((item, index) => +item.quantity !== +data[index].quantity);
-            console.log('[Cart] applyChanges: changedItems.length', changedItems.length);
-            if (!changedItems.length) return;
-
-            const deleteItems: CartContentWithMeta[] = changedItems.map(item => {
+            const deleteItems = newItems.map(item => {
                 return {
                     ...item,
-                    quantity: 0
+                    quantity: 0,
                 }
-            });
-            const deleteKeys = deleteItems.map(item => item.positionId.toString());
+            })
 
-            // delete items wanted to change
-            await addItems(deleteItems).unwrap();
-            // add changed items back
-            const result = await addItems(changedItems).unwrap();
-            if(result.status === 0)
+            // delete old items
+            let result = await addItems(deleteItems).unwrap();
+            if (result.status !== 1) {
                 ToastService.error(result.errorMessage);
+            }
+            console.log('items deleted');
 
-            void AsyncStorageService.multiRemove(deleteKeys);
+            // add new items
+            result = await addItems(newItems).unwrap();
+            if (result.status !== 1) {
+                ToastService.error(result.errorMessage);
+            }
+            console.log('items re-added');
 
-            const newIds = result.positions.map(item => item.cartPositionId.toString());
-
-            void AsyncStorageService.multiSetObjects(newIds, changedItems.map((item, index) => {
+            const ids = result.positions.map((position, index) => {
                 return {
-                    ...item,
-                    positionId: newIds[index]
+                    oldId: deleteItems[index].positionId,
+                    newId: position.cartPositionId
                 }
-            }))
-        } catch(e) {
-            ToastService.error((e as Error).message);
-        }
-    }, [assignedData]);
+            })
+            dispatch(CartActions.updateCurrentOrderIds(ids));
+        } catch (e) {
+            let error: Error | NetworkError = e as Error;
+            if(!error.message) error = new NetworkError(e as NetworkError);
 
-    useEffect(() => {
-        if (data.length) {
-            void assignCartData(data)
-                .then(result => {
-                    console.log('[Cart] got assigned data: result', result?.length || 'no result')
-                    result ? setAssignedData(result) : setAssignedData([]);
-                })
+            const errorMessage = ResponseService.getErrorMessage(error) || 'Ошибка обновления количества деталей';
+            ToastService.error(errorMessage);
         }
-    }, [data]);
+    }, []);
+    const applyChanges = useCallback(async () => {
+        const newItems: CartContentResponse[] = [];
+
+        for (const metaDataItem of metaData) {
+            const item = data.find(item => item.positionId === metaDataItem.positionId);
+            if (!item) continue;
+            if (item.quantity === metaDataItem.quantity) continue;
+            newItems.push({ ...item, quantity: metaDataItem.quantity });
+        }
+        if (!newItems.length) return;
+
+        dispatch(CartActions.setUpdating(true));
+
+        await changeCartQuantities(newItems);
+
+        dispatch(CartActions.setUpdating(false));
+    }, [metaData, data])
+
+    const deleteUnnecessaryData = useCallback(() => {
+        const deleteItems = metaData.filter(item => !data.find(value => value.positionId === item.positionId))
+            .map(item => item.positionId);
+
+        dispatch(CartActions.deleteItems(deleteItems));
+    }, [data, metaData]);
+    const checkQuantities = useCallback(() => {
+        data.forEach(item => {
+            const found = metaData.find(value => value.positionId === item.positionId);
+            if (!found) {
+                const newItem = createNewMetaItem(item);
+                dispatch(CartActions.addItem(newItem));
+            } else if (found.quantity !== item.quantity) {
+                dispatch(CartActions.updateItem({ positionId: item.positionId, quantity: item.quantity }));
+            }
+        })
+    }, [data, metaData]);
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        return navigation.addListener('blur', applyChanges);
-    }, [navigation, assignedData]);
+        return navigation.addListener('blur', async () => {
+            await applyChanges();
+            checkQuantities();
+            deleteUnnecessaryData();
+            await PersistCart();
+        });
+    }, [navigation, data, metaData]);
+    useEffect(() => {
+        checkQuantities();
+    }, [data]);
 
     const handleClearCart = async () => {
         try {
             const result = await clearCart().unwrap();
 
             if (result.status === 1) {
-                await clearStorageCartInfo();
+                clearCartState();
                 ToastService.success('Корзина очищена');
             } else ToastService.error(result.errorMessage);
 
         } catch (e) {
             ToastService.error((e as Error).message);
         }
-    }
-
-    const handleItemChange = (item: CartContentWithMeta, index: number) => {
-        const prevItem = assignedData[index];
-        const nextData = [
-            ...assignedData.slice(0, index),
-            { ...prevItem, ...item },
-            ...assignedData.slice(index + 1)
-        ];
-        setAssignedData(nextData);
-        AsyncStorageService.mergeObject(item.positionId.toString(), item);
     }
 
     if (isLoading || (isFetching && !data.length)) return <MaterialActivityIndicator/>
@@ -148,16 +161,12 @@ export default function Cart() {
                     paddingVertical: 8,
                     paddingHorizontal: 16,
                 }}
-                data={assignedData}
-                renderItem={({ item, index }) =>
-                    <CartItem onChange={(value) => handleItemChange(value, index)} item={item}/>
+                data={data}
+                renderItem={({ item }) =>
+                    <CartItem item={item}/>
                 }
             />
-            <CartFooter
-                dataIds={filteredIds}
-                itemsNumber={itemsNumber}
-                total={total}
-            />
+            <CartFooter/>
         </KeyboardAvoidingView>
     )
 }

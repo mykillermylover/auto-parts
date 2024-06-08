@@ -44,8 +44,7 @@ export default function LoginForm({ onLoading }: OnLoadingFunction) {
         } catch (err) {
             setIsLoading(false);
 
-            console.log(err);
-            const error = err as NetworkError;
+            const error = new NetworkError(err as NetworkError);
             const errorMessage = ResponseService.getErrorMessage(error);
 
             ToastService.error(errorMessage);

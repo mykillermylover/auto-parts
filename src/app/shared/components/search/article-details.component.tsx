@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { FormattedArticle } from '@shared/types/formatted-article.response';
-import { Flex } from 'react-native-flex-layout';
 import { FlashList } from '@shopify/flash-list';
 import { useCartAddItemsMutation } from '@store/query/cart/cart.api';
 import { OrderPositionModel } from '@shared/models/order-position.model';
@@ -10,10 +9,14 @@ import { NetworkError } from '@shared/errors/network.error';
 import { SearchArticle } from '@store/query/search/responses/articles.response';
 import { ArticleDetailsItem } from '@components/article/article-details-item';
 import { ArticleCardCover } from '@components/article/article-card-cover';
-import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { BottomSheetScrollView, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { AppConstants } from '@shared/consts';
 import { cartContentFromSearchArticleCartAddResult } from '@shared/types/cart-content-meta';
-import { AsyncStorageService } from '@services/async-storage.service';
+import { useAppDispatch } from '@shared/hooks';
+import { CartActions } from '@store/cart/cart.store';
+import { APP_MARGIN } from '@shared/consts/app.const';
+import { Flex } from 'react-native-flex-layout';
+import { useTheme } from 'react-native-paper';
 
 interface DetailsProps {
     item: FormattedArticle
@@ -22,7 +25,8 @@ interface DetailsProps {
 const MARGIN = AppConstants.APP_MARGIN;
 
 export const ArticleDetails = ({ item }: DetailsProps) => {
-
+    const { roundness } = useTheme();
+    const dispatch = useAppDispatch();
     const [addToCart] = useCartAddItemsMutation();
 
     const CAROUSEL_WIDTH = useMemo(() => SCREEN_WIDTH - 2 * MARGIN, []);
@@ -42,7 +46,7 @@ export const ArticleDetails = ({ item }: DetailsProps) => {
                 ToastService.success(`Позиция ${item.brand} ${item.number} (${quantity} шт.) добавлена в корзину`);
 
                 const cartItem = cartContentFromSearchArticleCartAddResult(item, result.positions[0], images);
-                void AsyncStorageService.setObject(cartItem.positionId.toString(), cartItem);
+                dispatch(CartActions.addItem(cartItem));
             }
         } catch (e) {
             const errorMessage = ResponseService.getErrorMessage(e as NetworkError);
@@ -51,12 +55,12 @@ export const ArticleDetails = ({ item }: DetailsProps) => {
     }
 
     return (
-        <Flex fill>
+        <Flex fill minH={300} mh={APP_MARGIN} mb={APP_MARGIN * 4} radius={roundness * 3} overflow={'hidden'}>
             <FlashList
-                estimatedItemSize={300}
                 contentContainerStyle={{
-                    paddingHorizontal: 8
+                    paddingBottom: APP_MARGIN
                 }}
+                estimatedItemSize={300}
                 ListHeaderComponent={<ArticleCardCover width={CAROUSEL_WIDTH} height={200} images={images}/>}
                 data={item.articles}
                 renderItem={({ item }) =>
@@ -68,6 +72,9 @@ export const ArticleDetails = ({ item }: DetailsProps) => {
                         }}
                     />}
                 keyExtractor={item => item.itemKey}
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-expect-error
+                renderScrollComponent={BottomSheetScrollView}
             />
         </Flex>
     )

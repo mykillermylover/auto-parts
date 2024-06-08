@@ -29,7 +29,10 @@ export const cartApi = createApi({
                 query: (positions) => ({
                     url: 'add',
                     method: 'post',
-                    params: {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    data: {
                         positions
                     }
                 }),

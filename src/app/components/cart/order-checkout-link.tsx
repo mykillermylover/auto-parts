@@ -2,16 +2,11 @@ import React from 'react';
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
 
-interface OrderCheckoutLinkProps {
-    dataIds: string[],
-}
-
-export const OrderCheckoutLink = ({ dataIds }: OrderCheckoutLinkProps) => {
+export const OrderCheckoutLink = () => {
 
     const redirect = () => {
         router.navigate({
             pathname: 'cart/order-checkout',
-            params: { keys: JSON.stringify(dataIds) }
         })
     }
 

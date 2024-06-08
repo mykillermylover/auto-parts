@@ -18,7 +18,7 @@ export const OrderCartButton = ({ colors, total, onPress, loading = false }: Ord
         <Pressable
             disabled={loading}
             style={[styles.button, {
-                backgroundColor: loading ? colors.surfaceVariant : colors.primary
+                backgroundColor: loading ? colors.outline : colors.primary
             }]}
             onPress={onPress}
         >

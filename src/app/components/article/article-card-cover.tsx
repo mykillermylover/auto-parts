@@ -1,12 +1,12 @@
 import React from 'react';
-import { Card, CardCoverProps } from 'react-native-paper';
+import { Card, CardCoverProps, useTheme } from 'react-native-paper';
 import Carousel from 'react-native-reanimated-carousel';
 import { View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import { MaterialCarouselDots } from '@shared/components/material-carousel-dots';
 
 interface ArticleCarouselProps {
-    style?: CardCoverProps['style'];
+    imageWrapperStyle?: CardCoverProps['style'];
     images: string[];
     width: number;
     height?: number;
@@ -14,7 +14,9 @@ interface ArticleCarouselProps {
 
 const imageUrlFull = 'https://pubimg.nodacdn.net/images/full';
 
-export const ArticleCardCover = ({ images, width, height = width / 1.5, style }: ArticleCarouselProps) => {
+export const ArticleCardCover = ({ images, width, height = width / 1.5, imageWrapperStyle }: ArticleCarouselProps) => {
+    const { roundness } = useTheme();
+
     const progress = useSharedValue(0);
 
     if (images.length > 1) return (
@@ -28,18 +30,17 @@ export const ArticleCardCover = ({ images, width, height = width / 1.5, style }:
                 style={[{
                     width,
                     height,
-                }, style]}
+                    borderRadius: 3 * roundness
+                }, imageWrapperStyle]}
                 loop={false}
                 data={images}
-                renderItem={({ item }) =>
+                renderItem={({ item }) => 
                     <Card.Cover
-                        style={[{ width, height }, style]}
+                        style={[{ width, height }]}
                         height={height}
                         width={width}
                         resizeMode='contain'
-                        source={{
-                            uri: `${imageUrlFull}/${item}`
-                        }}
+                        source={{ uri: `${imageUrlFull}/${item}` }}
                     />
                 }
             />
@@ -49,16 +50,14 @@ export const ArticleCardCover = ({ images, width, height = width / 1.5, style }:
             />
         </View>
     )
-
+    
     return (
         <Card.Cover
-            style={[{ width, height }, style]}
+            style={[{ width, height }, imageWrapperStyle]}
             height={height}
             width={width}
             resizeMode='contain'
-            source={{
-                uri: `${imageUrlFull}/${images[0]}`
-            }}
+            source={{ uri: `${imageUrlFull}/${images[0]}` }}
         />
     )
 }

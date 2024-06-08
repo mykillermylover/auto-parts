@@ -1,29 +1,37 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Card, Checkbox, Divider, HelperText, Icon, IconButton, Text, useTheme } from 'react-native-paper';
+import { Card, Checkbox, Divider, HelperText, IconButton, Text, useTheme } from 'react-native-paper';
 import { ArticleCardCover } from '@components/article/article-card-cover';
 import { APP_MARGIN } from '@shared/consts/app.const';
 import { formatDeadline } from '@shared/features/format-deadline';
 import { HStack, VStack } from 'react-native-flex-layout';
 import { QuantityButtons } from '@shared/components/inputs/quantity-buttons';
 import { StyleSheet, View } from 'react-native';
-import { CartContentWithMeta } from '@shared/types/cart-content-with-meta';
-import { CartContentMeta } from '@shared/types/cart-content-meta';
 import { useCartAddItemsMutation } from '@store/query/cart/cart.api';
 import { ToastService } from '@services/toast.service';
-import { AsyncStorageService } from '@services/async-storage.service';
+import { CartContentResponse } from '@store/query/cart/responses/cart-content.response';
+import { useAppDispatch, useAppSelector } from '@shared/hooks';
+import CartSelectors from '@store/cart/cart.selectors';
+import { CartActions } from '@store/cart/cart.store';
 
 interface CartItemProps {
-    item: CartContentWithMeta,
-    onChange: (item: CartContentWithMeta) => void,
+    item: CartContentResponse,
+}
+
+const defaultMeta = (quantity: number) => {
+    return {
+        images: [],
+        availability: quantity,
+        checked: true,
+        quantity: quantity
+    }
 }
 
 export const CartItem = (
     {
         item,
-        onChange
     }: CartItemProps) => {
     const {
-        quantity,
+        quantity: itemQuantity,
         brand,
         number,
         description,
@@ -33,27 +41,27 @@ export const CartItem = (
         packing,
         comment,
         errorMessage,
-        images,
-        checked,
-        availability,
+        positionId
     } = item;
+    const metaData = useAppSelector(CartSelectors.getItem(positionId));
+    const {
+        images,
+        availability,
+        checked,
+        quantity
+    } = metaData ?? defaultMeta(itemQuantity);
+
+    const dispatch = useAppDispatch();
+
     const [addItem] = useCartAddItemsMutation();
+
     const [quantityText, setQuantityText] = useState(quantity.toString());
     const { colors } = useTheme();
 
     useEffect(() => {
         setQuantityText(quantity.toString());
-    }, [item]);
+    }, [item, metaData]);
 
-    const handleChange = (newItem: Partial<CartContentMeta>) => {
-        onChange({
-            ...item,
-            images,
-            checked,
-            availability,
-            ...newItem
-        });
-    }
     const deleteItem = useCallback(async () => {
         try {
             const result = await addItem([{
@@ -62,7 +70,7 @@ export const CartItem = (
             }]).unwrap();
 
             if (result.status === 1) {
-                void AsyncStorageService.remove(item.positionId.toString());
+                dispatch(CartActions.deleteItem(positionId));
                 ToastService.success(`Позиция ${brand} ${number} удалена`);
             } else {
                 ToastService.error('Не удалось удалить позицию')
@@ -70,6 +78,12 @@ export const CartItem = (
         } catch (e) {
             ToastService.error((e as Error).message);
         }
+    }, [item]);
+    const changeCheck = useCallback(() => {
+        dispatch(CartActions.updateItem({ checked: !checked, positionId }));
+    }, [metaData]);
+    const changeQuantity = useCallback((newQuantity: number) => {
+        dispatch(CartActions.updateItem({ quantity: newQuantity, positionId }));
     }, [item]);
 
     return (
@@ -80,7 +94,7 @@ export const CartItem = (
                 <HStack center spacing={APP_MARGIN} mv={APP_MARGIN}>
                     <View>
                         <Checkbox
-                            onPress={() => handleChange({ checked: !checked })}
+                            onPress={changeCheck}
                             status={checked ? 'checked' : 'unchecked'}/>
                     </View>
                     <ArticleCardCover images={images} width={100} height={100}/>
@@ -110,11 +124,11 @@ export const CartItem = (
 
                 <QuantityButtons
                     input={quantityText}
-                    oninput={setQuantityText}
+                    onInput={setQuantityText}
                     maxQuantity={availability || quantity}
                     quantityMultiplier={packing || 1}
                     value={quantity}
-                    setValue={(quantity) => handleChange({ quantity })}
+                    setValue={changeQuantity}
                 />
             </HStack>
 
