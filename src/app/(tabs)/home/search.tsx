@@ -5,7 +5,7 @@ import { ItemModel } from '@shared/models/item.model';
 import { useArticleInfoQuery } from '@store/query/local/local.api';
 import { FlashList, FlashListProps } from '@shopify/flash-list';
 import { ArticleItem } from '@components/article-item';
-import { defaultArticleResponse } from '@shared/consts/search.const';
+import { defaultArticle, defaultArticleResponse } from '@shared/consts/search.const';
 import { Button, HelperText, Surface, Text } from 'react-native-paper';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { ArticleDetails } from '@shared/components/search/article-details.component';
@@ -22,16 +22,17 @@ export default function Search() {
     const item: ItemModel = useLocalSearchParams<{ brand: string, number: string }>();
     const { data = defaultArticleResponse, isFetching, isError, refetch } = useArticleInfoQuery(item);
 
-    const [currentItem, setCurrentItem] = useState(data.item);
+    const [currentItem, setCurrentItem] = useState(defaultArticle);
 
     const bottomSheetRef = useRef<BottomSheet>(null);
 
     const listItems = useMemo(() => {
-        const dataItem = isObjectEmpty(data.item) ? [] : ['Искомый артикул', data.item];
+        const dataItems = isObjectEmpty(data.item) ? [] : ['Искомый артикул', ...data.item];
+        const dataCrosses = !data.crosses.length ? [] : ['Аналоги', ...data.crosses];
 
-        if (!dataItem.length && !data.crosses.length) return [];
+        if (!dataItems.length && !dataCrosses.length) return [];
 
-        return [...dataItem, 'Аналоги', ...data.crosses];
+        return [...dataItems, ...dataCrosses];
     }, [data])
     const stickyHeaderIndices = useMemo(() => {
         return listItems
@@ -45,8 +46,9 @@ export default function Search() {
         setCurrentItem(value);
         bottomSheetRef.current?.snapToIndex(0);
     }, []);
+    const itemAliases = useMemo(() => data.item.length > 1, [data]);
     const overrideItemLayout: FlashListProps<FormattedArticle | string>['overrideItemLayout'] = (layout, item, index, maxColumns) => {
-        if (index === 1 || typeof item === 'string') {
+        if ((index === 1 && !itemAliases) || typeof item === 'string') {
             layout.span = maxColumns;
         }
     };
@@ -90,7 +92,7 @@ export default function Search() {
                             <ArticleItem
                                 containerStyle={{ flex: 1 }}
                                 onPress={() => openBottomSheet(item)}
-                                numColumns={index === 1 ? 1 : numColumns}
+                                numColumns={(index === 1 && !itemAliases) ? 1 : numColumns}
                                 article={item}
                             />
                         )

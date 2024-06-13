@@ -24,7 +24,7 @@ export const ArticleItem = (
 
 
     const images = useMemo(() => {
-        return article?.images ? article.images.map((image) => image.name) : []
+        return article?.images ? article.images.map((image) => image.name) : [AppConstants.articleImagePlaceholderName]
     },[article.images]);
     const CAROUSEL_WIDTH = useMemo(() => SCREEN_WIDTH / numColumns - 2 * MARGIN, [numColumns]);
 
@@ -33,7 +33,7 @@ export const ArticleItem = (
             style={[
                 {
                     marginVertical: MARGIN / 2,
-                    marginHorizontal: MARGIN
+                    marginHorizontal: MARGIN,
                 },
                 containerStyle
             ]}
@@ -43,9 +43,14 @@ export const ArticleItem = (
                 width={CAROUSEL_WIDTH}
                 height={200}
             />
-            <Card.Title title={article.brand} subtitle={article.number}/>
+            <Card.Title title={article.brand} subtitle={article.numberFix}/>
             <Card.Content>
-                <Text>{article.description}</Text>
+                <Text
+                    numberOfLines={3}
+                    style={{
+                        height: 50
+                    }}
+                >{article.description}</Text>
                 <HelperText type='info'>От {article.cheapest.price} руб.</HelperText>
                 <HelperText type='info'>Самый быстрый - {article.fastest.price} руб.</HelperText>
             </Card.Content>

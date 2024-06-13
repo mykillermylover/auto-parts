@@ -6,12 +6,13 @@ export const advicesLimit = 5;
 export const defaultArticle: FormattedArticle = {
     articles: [],
     cheapest: {} as SearchArticle,
-    fastest: {} as SearchArticle,
-    images: [],
     description: '',
+    fastest: {} as SearchArticle,
+    images: []
 }
+
 export const defaultArticleResponse: FormattedArticleResponse = {
-    item: defaultArticle,
+    item: [],
     crosses: []
 };
 

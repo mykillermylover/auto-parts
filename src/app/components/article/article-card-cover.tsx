@@ -53,7 +53,7 @@ export const ArticleCardCover = ({ images, width, height = width / 1.5, imageWra
     
     return (
         <Card.Cover
-            style={[{ width, height }, imageWrapperStyle]}
+            style={[{ width, height, backgroundColor: 'white' }, imageWrapperStyle]}
             height={height}
             width={width}
             resizeMode='contain'

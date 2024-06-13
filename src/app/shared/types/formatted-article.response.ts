@@ -11,6 +11,6 @@ export type FormattedArticle = {
 } & Partial<Record<keyof SearchArticle, string>>;
 
 export interface FormattedArticleResponse {
-    item: FormattedArticle;
+    item: FormattedArticle[];
     crosses: FormattedArticle[];
 }

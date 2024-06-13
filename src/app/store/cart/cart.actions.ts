@@ -4,7 +4,10 @@ import { CartContentMeta } from '@shared/types/cart-content-meta';
 
 const cartActions = {
     setCartItems: (state: CartState, { payload }: PayloadAction<CartState['cartItems']>) => {
-        state.cartItems = payload;
+        return {
+            ...state,
+            cartItems: payload
+        }
     },
     updateCurrentOrderIds: (state: CartState, { payload }: PayloadAction<{ oldId: number, newId: number }[]>) => {
         payload.forEach(({ oldId, newId }) => {
