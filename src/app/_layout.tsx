@@ -16,13 +16,13 @@ import AppNav from '@components/app-navigation';
 import { toastConfig } from '@shared/config/material-toast-config';
 import { PersistData } from '@shared/features/persist-data';
 
-void InitApp();
 export default function AppLayout() {
     const [appTheme, navTheme] = useAppTheme();
 
     ToastService.theme = useTheme();
 
     useEffect(() => {
+        void InitApp();
         console.log('Main Layout did mount!');
         return () => {
             void PersistData();

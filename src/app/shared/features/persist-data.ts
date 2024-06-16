@@ -2,8 +2,8 @@ import appStore from '@store/app.store';
 import { AsyncStorageService } from '@services/async-storage.service';
 
 export async function PersistCart() {
-    const cart = appStore.getState().cart.cartItems;
-    await AsyncStorageService.setObject('cart', cart);
+    const { cartItems } = appStore.getState().cart;
+    await AsyncStorageService.setObject('cart', cartItems);
     console.log('[PersistCart] cart saved')
 }
 
