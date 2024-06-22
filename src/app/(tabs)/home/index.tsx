@@ -9,19 +9,20 @@ import { Card } from 'react-native-paper';
 
 import { AnimatedSearch } from '@shared/components/search/animated-search';
 import { DismissKeyboardHOC } from '@shared/features/dismiss-keyboard.hoc';
-import { CarouselLeftAlign } from '@components/carousel-left-align';
-import { AnimationConstants, AppConstants } from '@shared/consts';
+import { AnimationConstants } from '@shared/consts';
+import { logoImage } from '@shared/consts/app.const';
 
 const KeyboardDismissVStack = DismissKeyboardHOC(VStack);
+const CAROUSEL_HEIGHT = 250;
 
 export default function FirstHomeTab() {
-    const carouselHeight = useSharedValue(200);
+    const carouselHeight = useSharedValue(CAROUSEL_HEIGHT);
 
     const handleFocus = () => {
         carouselHeight.value = withTiming(0, AnimationConstants.timingConfig);
     };
     const handleBlur = () => {
-        carouselHeight.value = withTiming(200, AnimationConstants.timingConfig);
+        carouselHeight.value = withTiming(CAROUSEL_HEIGHT, AnimationConstants.timingConfig);
     };
 
     return (
@@ -36,14 +37,15 @@ export default function FirstHomeTab() {
                     overflow: 'hidden'
                 }}
             >
-                <CarouselLeftAlign
-                    pagingEnabled={true}
-                    data={[...new Array(6).keys()]}
-                    renderItem={() => (
-                        <Card mode='contained' style={{ flex: 1, marginLeft: 8, borderRadius: 35 }}>
-                            <Card.Cover source={AppConstants.imagePlaceholder}/>
-                        </Card>
-                    )}
+                <Card.Cover
+                    style={{
+                        width: '80%',
+                        height: CAROUSEL_HEIGHT,
+                        alignSelf: 'center',
+                        backgroundColor: 'white'
+                    }}
+                    source={logoImage}
+                    resizeMode={'contain'}
                 />
             </Animated.View>
 

@@ -1,32 +1,63 @@
 import React, { useCallback, useMemo } from 'react';
 import { APP_MARGIN } from '@shared/consts/app.const';
-import { Text, useTheme } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
+import { Checkbox, CheckboxProps, Divider, Text, useTheme } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
 import { getNoun } from '@shared/features/get-noun';
 import { HStack, VStack } from 'react-native-flex-layout';
 import { OrderCheckoutLink } from '@components/cart/order-checkout-link';
 import { ShadowedView, shadowStyle } from 'react-native-fast-shadow';
-import { useAppSelector } from '@shared/hooks';
+import { useAppDispatch, useAppSelector } from '@shared/hooks';
 import CartSelectors from '@store/cart/cart.selectors';
+import { CartActions } from '@store/cart/cart.store';
 
 export const CartFooter = () => {
+    const { colors } = useTheme();
 
-    const order = useAppSelector(CartSelectors.getCurrentOrder);
+    const cartPositionsNumber = useAppSelector(CartSelectors.cartLength);
+    const itemsNumber = useAppSelector(CartSelectors.currentOrderItemsNumber);
+    const positionsNumber = useAppSelector(CartSelectors.currentOrderLength);
+    const total = useAppSelector(CartSelectors.currentOrderTotal);
 
-    const itemsNumber = useMemo(() => order.reduce((prev, curr) => prev + +curr.quantity, 0), [order])
-    const total = useMemo(() => order.reduce((prev, curr) => prev + curr.quantity * curr.price, 0), [order])
+    const dispatch = useAppDispatch();
 
-    const getPositionsNoun = useCallback((items: number) => {
-        const left = getNoun('Будет заказан', 'Будут заказаны', 'Будут заказаны', items);
-        const right = getNoun('товар', 'товара', 'товаров', items);
+    const checkboxStatus: CheckboxProps['status'] = useMemo(() => {
+        const diff = cartPositionsNumber - positionsNumber;
 
-        return `${left} ${items} ${right}`;
+        if (diff === 0)
+            return 'checked'
+
+        if (diff < cartPositionsNumber)
+            return 'indeterminate'
+
+        return 'unchecked'
+    }, [positionsNumber, cartPositionsNumber]);
+
+    const positionsNoun = useMemo(() => {
+        const left = getNoun('Выбрана', 'Выбраны', 'Выбрано', positionsNumber);
+        const right = getNoun('позиция', 'позиции', 'позиций', positionsNumber);
+
+        return `${left} ${positionsNumber} ${right}`;
+    }
+    , [positionsNumber]);
+    const itemsNoun = useMemo(() => {
+        const right = getNoun('товар', 'товара', 'товаров', itemsNumber);
+
+        return `${itemsNumber} ${right}`;
     }
     , [itemsNumber]);
 
-    const theme = useTheme();
+    const switchCheckbox = useCallback(() => {
+        switch (checkboxStatus) {
+            case 'checked':
+                dispatch(CartActions.unCheckAll());
+                break;
+            default:
+                dispatch(CartActions.checkAll());
+        }
+    }, [checkboxStatus]);
 
     return (
+
         <ShadowedView
             style={shadowStyle({
                 opacity: 0.3,
@@ -34,31 +65,49 @@ export const CartFooter = () => {
                 offset: [0, 0]
             })}
         >
-            <View
-                style={[styles.surface, {
-                    backgroundColor: theme.colors.elevation.level4
-                }]}
+            <VStack
+                style={[
+                    styles.surface,
+                    {
+                        backgroundColor: colors.elevation.level4
+                    }
+                ]}
             >
-                <HStack w={'100%'} justify='between' items='center'>
+
+                <HStack>
+                    <Checkbox.Item
+                        labelVariant='labelLarge'
+                        style={{
+                            paddingHorizontal: 0,
+                            paddingVertical: 0,
+                            marginLeft: -APP_MARGIN
+                        }}
+                        position={'leading'}
+                        label={positionsNoun}
+                        status={checkboxStatus}
+                        onPress={switchCheckbox}
+                    />
+                </HStack>
+
+                <Divider/>
+
+                <HStack pt={APP_MARGIN / 2} w={'100%'} justify='between' items='center'>
                     <VStack>
-                        <Text>{getPositionsNoun(itemsNumber)}</Text>
-                        <Text>
-                            На сумму <Text variant='titleMedium'>{total} руб.</Text>
-                        </Text>
+                        <Text variant='labelMedium'>{itemsNoun}</Text>
+                        <Text variant='titleMedium'>{total} ₽</Text>
                     </VStack>
 
-                    <OrderCheckoutLink />
+                    <OrderCheckoutLink/>
                 </HStack>
-            </View>
+            </VStack>
         </ShadowedView>
     )
 }
 
 const styles = StyleSheet.create({
     surface: {
-        paddingVertical: APP_MARGIN,
+        paddingBottom: APP_MARGIN,
         paddingHorizontal: APP_MARGIN * 2,
         width: '100%',
-        alignItems: 'flex-end',
     }
 })

@@ -9,12 +9,13 @@ interface MaterialCarouselDotsProps<T> {
     data: T[]
 }
 
-export const MaterialCarouselDots = <T extends {}>({ progress, data }: MaterialCarouselDotsProps<T>) => {
+export const MaterialCarouselDots = <T extends any>({ progress, data }: MaterialCarouselDotsProps<T>) => {
 
     const { dark, colors } = useTheme();
 
     return (
         <Pagination.Basic
+            size={APP_MARGIN}
             progress={progress}
             data={data}
             dotStyle={{

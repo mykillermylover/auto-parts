@@ -20,7 +20,6 @@ export const QuantitySegmentedButtons = ({ maxQuantity, onSubmit, quantityMultip
             nextQuantity = available;
 
         setQuantity(nextQuantity);
-
     }
     const decrease = (itemsNumber: number) => {
         let nextQuantity = quantity - itemsNumber;

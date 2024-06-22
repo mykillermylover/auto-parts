@@ -4,9 +4,9 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { ItemModel } from '@shared/models/item.model';
 import { useArticleInfoQuery } from '@store/query/local/local.api';
 import { FlashList, FlashListProps } from '@shopify/flash-list';
-import { ArticleItem } from '@components/article-item';
+import { ArticleItem } from '@components/article/article-item';
 import { defaultArticle, defaultArticleResponse } from '@shared/consts/search.const';
-import { Button, HelperText, Surface, Text } from 'react-native-paper';
+import { Button, HelperText, Text, useTheme } from 'react-native-paper';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { ArticleDetails } from '@shared/components/search/article-details.component';
 import { FormattedArticle } from '@shared/types/formatted-article.response';
@@ -19,6 +19,7 @@ import { isObjectEmpty } from '@shared/features/is-object-empty';
 const numColumns = 2;
 
 export default function Search() {
+    const { colors } = useTheme();
     const item: ItemModel = useLocalSearchParams<{ brand: string, number: string }>();
     const { data = defaultArticleResponse, isFetching, isError, refetch } = useArticleInfoQuery(item);
 
@@ -42,13 +43,18 @@ export default function Search() {
             }).filter(item => item !== null) as number[];
     }, [listItems])
 
+    const itemAliases = useMemo(() => data.item.length > 1, [data]);
+    const isFullRow = useCallback((index: number) => {
+        const lastIndex = listItems.length - data.item.length - stickyHeaderIndices.length - 1;
+        return (index === 1 && !itemAliases) ||
+            (index === listItems.length - 1 && lastIndex % 2 === 0);
+    }, [data]);
     const openBottomSheet = useCallback((value: FormattedArticle) => {
         setCurrentItem(value);
         bottomSheetRef.current?.snapToIndex(0);
     }, []);
-    const itemAliases = useMemo(() => data.item.length > 1, [data]);
     const overrideItemLayout: FlashListProps<FormattedArticle | string>['overrideItemLayout'] = (layout, item, index, maxColumns) => {
-        if ((index === 1 && !itemAliases) || typeof item === 'string') {
+        if (isFullRow(index) || typeof item === 'string') {
             layout.span = maxColumns;
         }
     };
@@ -83,16 +89,16 @@ export default function Search() {
                 renderItem={({ item, index }) => {
                     if (typeof item === 'string') {
                         return (
-                            <Surface mode='flat' style={[styles.listHeader]}>
-                                <Text>{item}</Text>
-                            </Surface>
+                            <Flex style={[styles.listHeader]} bg={colors.background}>
+                                <Text variant='bodyLarge'>{item}</Text>
+                            </Flex>
                         )
                     } else {
                         return (
                             <ArticleItem
                                 containerStyle={{ flex: 1 }}
                                 onPress={() => openBottomSheet(item)}
-                                numColumns={(index === 1 && !itemAliases) ? 1 : numColumns}
+                                numColumns={isFullRow(index) ? 1 : numColumns}
                                 article={item}
                             />
                         )
@@ -106,8 +112,7 @@ export default function Search() {
             <MaterialBottomSheetBase
                 bottomSheetRef={bottomSheetRef}
                 enablePanDownToClose
-                enableDynamicSizing
-                snapPoints={[520]}
+                snapPoints={[520, '100%']}
                 style={styles.bottomSheet}
             >
                 <ArticleDetails item={currentItem}/>
@@ -119,8 +124,6 @@ export default function Search() {
 const styles = StyleSheet.create({
     listHeader: {
         padding: APP_MARGIN,
-        borderBottomWidth: 0.3,
-        borderBottomColor: '#40404033',
         flex: 1,
     },
     bottomSheet: {

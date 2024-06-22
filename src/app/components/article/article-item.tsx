@@ -1,9 +1,11 @@
-import { Button, Card, CardProps, Divider, HelperText, Text, TouchableRipple } from 'react-native-paper';
+import { Card, CardProps, Text, useTheme } from 'react-native-paper';
 import React, { useMemo } from 'react';
 import { FormattedArticle } from '@shared/types/formatted-article.response';
 import { Dimensions } from 'react-native';
 import { ArticleCardCover } from '@components/article/article-card-cover';
 import { AppConstants } from '@shared/consts';
+import { Flex, VStack } from 'react-native-flex-layout';
+import { APP_MARGIN } from '@shared/consts/app.const';
 
 interface ArticleItemProps {
     article: FormattedArticle;
@@ -21,57 +23,52 @@ export const ArticleItem = (
         numColumns = 1,
         containerStyle
     }: ArticleItemProps & { numColumns?: number }) => {
-
-
+    
+    const { colors } = useTheme();
+    
     const images = useMemo(() => {
-        return article?.images ? article.images.map((image) => image.name) : [AppConstants.articleImagePlaceholderName]
-    },[article.images]);
+        return article.images.length ? article.images.map((image) => image.name) : [AppConstants.articleImagePlaceholderName]
+    },[article]);
     const CAROUSEL_WIDTH = useMemo(() => SCREEN_WIDTH / numColumns - 2 * MARGIN, [numColumns]);
+    const CAROUSEL_HEIGHT = useMemo(() => numColumns === 1 ? 200 : 100, [numColumns]);
+    const CARD_HEIGHT = useMemo(() => numColumns === 1 ? 370 : 270, [numColumns]);
 
     return (
         <Card
             style={[
                 {
-                    marginVertical: MARGIN / 2,
+                    marginVertical: MARGIN,
                     marginHorizontal: MARGIN,
+                    height: CARD_HEIGHT,
                 },
                 containerStyle
             ]}
+            onPress={onPress}
         >
             <ArticleCardCover
                 images={images}
                 width={CAROUSEL_WIDTH}
-                height={200}
+                height={CAROUSEL_HEIGHT}
             />
             <Card.Title title={article.brand} subtitle={article.numberFix}/>
-            <Card.Content>
+            <VStack ph={APP_MARGIN * 2}>
                 <Text
-                    numberOfLines={3}
+                    numberOfLines={2}
                     style={{
-                        height: 50
+                        height: APP_MARGIN * 5,
+                        color: colors.outline
                     }}
                 >{article.description}</Text>
-                <HelperText type='info'>От {article.cheapest.price} руб.</HelperText>
-                <HelperText type='info'>Самый быстрый - {article.fastest.price} руб.</HelperText>
-            </Card.Content>
-
-            <Divider style={{ marginTop: 16 }}/>
-
-            <TouchableRipple
-                style={{
-                    width: '100%',
-                }}
-                onPress={onPress}
-            >
-                <Button
-                    icon={{
-                        source: 'compare-vertical',
-                        direction: 'auto'
-                    }}
+                <Flex
+                    mt={APP_MARGIN}
+                    bg={colors.primaryContainer}
+                    h={APP_MARGIN * 5}
+                    radius={APP_MARGIN}
+                    center
                 >
-                    Подробнее
-                </Button>
-            </TouchableRipple>
+                    <Text variant='labelMedium'>От {article.cheapest.price} руб.</Text>
+                </Flex>
+            </VStack>
         </Card>
     )
 }

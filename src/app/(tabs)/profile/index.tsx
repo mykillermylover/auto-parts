@@ -1,6 +1,6 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ProfileComponent } from '@components/profile.component';
+import { ProfileComponent } from '@components/profile/profile.component';
 import { Flex, HStack, VStack } from 'react-native-flex-layout';
 import { ActivityIndicator, Button, FAB } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '@shared/hooks';

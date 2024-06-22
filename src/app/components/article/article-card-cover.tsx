@@ -4,17 +4,17 @@ import Carousel from 'react-native-reanimated-carousel';
 import { View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import { MaterialCarouselDots } from '@shared/components/material-carousel-dots';
+import { ABCPImageUrlFull } from '@shared/consts/app.const';
 
 interface ArticleCarouselProps {
     imageWrapperStyle?: CardCoverProps['style'];
     images: string[];
     width: number;
     height?: number;
+    imageUrlFull?: string;
 }
 
-const imageUrlFull = 'https://pubimg.nodacdn.net/images/full';
-
-export const ArticleCardCover = ({ images, width, height = width / 1.5, imageWrapperStyle }: ArticleCarouselProps) => {
+export const ArticleCardCover = ({ images, width, height = width / 1.5, imageWrapperStyle, imageUrlFull = ABCPImageUrlFull }: ArticleCarouselProps) => {
     const { roundness } = useTheme();
 
     const progress = useSharedValue(0);
@@ -40,7 +40,7 @@ export const ArticleCardCover = ({ images, width, height = width / 1.5, imageWra
                         height={height}
                         width={width}
                         resizeMode='contain'
-                        source={{ uri: `${imageUrlFull}/${item}` }}
+                        source={{ uri: `${imageUrlFull}${item}` }}
                     />
                 }
             />
@@ -53,11 +53,11 @@ export const ArticleCardCover = ({ images, width, height = width / 1.5, imageWra
     
     return (
         <Card.Cover
-            style={[{ width, height, backgroundColor: 'white' }, imageWrapperStyle]}
+            style={[{ width, height }, imageWrapperStyle]}
             height={height}
             width={width}
             resizeMode='contain'
-            source={{ uri: `${imageUrlFull}/${images[0]}` }}
+            source={{ uri: `${imageUrlFull}${images[0]}` }}
         />
     )
 }

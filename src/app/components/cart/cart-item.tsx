@@ -117,8 +117,8 @@ export const CartItem = (
                 <HStack spacing={APP_MARGIN * 2} items='center' justify='start' fill>
                     <Text>{formatDeadline(deadline, deadlineMax)}</Text>
                     <VStack>
-                        <Text variant='labelSmall'>{price} руб./шт.</Text>
-                        <Text variant='titleMedium'>{price * quantity} руб.</Text>
+                        <Text variant='labelSmall'>{price} ₽/шт.</Text>
+                        <Text variant='titleMedium'>{price * quantity} ₽</Text>
                     </VStack>
                 </HStack>
 

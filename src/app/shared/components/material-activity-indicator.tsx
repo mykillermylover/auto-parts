@@ -1,14 +1,20 @@
-import { ActivityIndicator, Surface, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Surface, SurfaceProps, useTheme } from 'react-native-paper';
 import React from 'react';
 
-export const MaterialActivityIndicator = () => {
+interface MaterialActivityIndicatorProps {
+    style?: SurfaceProps['style'],
+    elevation?: SurfaceProps['elevation']
+}
+
+export const MaterialActivityIndicator = ({ style, elevation = 0 }: MaterialActivityIndicatorProps) => {
     const theme = useTheme();
     return (
         <Surface
-            style={{
+            elevation={elevation}
+            style={[{
                 flex: 1,
                 justifyContent: 'center'
-            }}
+            }, style]}
             theme={theme}
         >
             <ActivityIndicator theme={theme} size='large'/>

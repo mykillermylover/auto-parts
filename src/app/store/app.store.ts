@@ -14,6 +14,7 @@ import { garageApi } from '@store/query/garage/garage.api';
 import { advicesApi } from '@store/query/advices/advices.api';
 import { localApi } from '@store/query/local/local.api';
 import { createLogger } from 'redux-logger';
+import { laximoApi } from '@store/query/laximo/laximo.api';
 
 const logger = createLogger({
     predicate: (getState, action) => !/[a-zA-Z]*Api\/config\/middlewareRegistered/.test(action.type)
@@ -29,6 +30,7 @@ const middlewares = [
     carTreeApi.middleware,
     garageApi.middleware,
     localApi.middleware,
+    laximoApi.middleware,
 ];
 
 const store = configureStore({
@@ -48,6 +50,7 @@ const store = configureStore({
         [carTreeApi.reducerPath]: carTreeApi.reducer,
         [garageApi.reducerPath]: garageApi.reducer,
         [localApi.reducerPath]: localApi.reducer,
+        [laximoApi.reducerPath]: laximoApi.reducer,
     },
     middleware: (gDF) => gDF().concat(...middlewares),
 });

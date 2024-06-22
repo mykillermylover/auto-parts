@@ -15,4 +15,8 @@ export function setHttpClientUserAuthData(login: string, passwordHash: string) {
         userlogin: login,
         userpsw: passwordHash
     };
+    localHttpClient.defaults.params = {
+        login,
+        password: passwordHash
+    };
 }

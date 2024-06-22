@@ -1,5 +1,5 @@
-import {OrderListItem} from '@store/query/orders/response/order-list.response';
-import {OrderPositionResponse} from '@store/query/orders/response/order-position.response';
+import { OrderListItem } from '@store/query/orders/response/order-list.response';
+import { OrderPositionResponse } from '@store/query/orders/response/order-position.response';
 
 export interface OrdersResponse {
     count: number;

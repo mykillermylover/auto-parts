@@ -1,7 +1,7 @@
 import { TranslucentBackground } from '@shared/components/translucent-background';
 import BottomSheet, { BottomSheetHandle, BottomSheetProps } from '@gorhom/bottom-sheet';
 import { IconButton, useTheme } from 'react-native-paper';
-import React, { RefObject, useCallback, useState } from 'react';
+import React, { RefObject, useCallback, useEffect, useState } from 'react';
 import { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { BottomSheetViewProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetView/types';
 import { APP_MARGIN } from '@shared/consts/app.const';
@@ -44,6 +44,10 @@ export const MaterialBottomSheetBase = (
             setBackgroundVisibility(false);
         }
     }
+
+    useEffect(() => {
+        return () => { setBackgroundVisibility(false) }
+    }, []);
 
     return (
         <>

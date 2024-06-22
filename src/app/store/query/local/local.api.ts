@@ -1,11 +1,9 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { axiosBaseQuery } from '@store/query/axios.query';
 import axios, { AxiosError } from 'axios';
-import * as SecureStore from 'expo-secure-store';
 
 import { NetworkError } from '@shared/errors/network.error';
 import { UserState } from '@store/user/user-state.model';
-import { SecureStoreConstants } from '@shared/consts';
 import { ItemModel } from '@shared/models/item.model';
 import { localHttpClient } from '@httpClient';
 import { FormattedArticleResponse } from '@shared/types/formatted-article.response';
@@ -21,8 +19,6 @@ export const localApi = createApi({
                 query: ({ brand, number }) => ({
                     url: 'search/articles',
                     params: {
-                        login: SecureStore.getItem(SecureStoreConstants.userLogin),
-                        password: SecureStore.getItem(SecureStoreConstants.userPassword),
                         brand,
                         number
                     }

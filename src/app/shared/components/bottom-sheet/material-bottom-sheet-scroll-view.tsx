@@ -17,6 +17,7 @@ export const MaterialBottomSheetScrollView = (
         closeButton = true,
         translucentBackground = true,
         enableDynamicSizing,
+        ...props
     }: Omit<BottomSheetProps, 'children'> & {
         bottomSheetRef: RefObject<BottomSheetMethods>,
         children: BottomSheetViewProps['children'],
@@ -37,8 +38,9 @@ export const MaterialBottomSheetScrollView = (
                 closeButton={closeButton}
                 translucentBackground={translucentBackground}
                 onChange={onChange}
+                {...props}
             >
-                <BottomSheetScrollView style={{ marginTop: 32 }}>
+                <BottomSheetScrollView>
                     {children}
                 </BottomSheetScrollView>
             </MaterialBottomSheetBase>

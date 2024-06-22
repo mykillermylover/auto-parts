@@ -2,6 +2,15 @@ import { CartState } from '@store/cart/cart-state.model';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { CartContentMeta } from '@shared/types/cart-content-meta';
 
+const setCheckedAll = (checked: boolean) => (state: CartState) => {
+    state.cartItems = state.cartItems.map((item) => {
+        return {
+            ...item,
+            checked
+        }
+    })
+}
+
 const cartActions = {
     setCartItems: (state: CartState, { payload }: PayloadAction<CartState['cartItems']>) => {
         return {
@@ -40,7 +49,9 @@ const cartActions = {
     },
     setUpdating: (state: CartState, { payload }: PayloadAction<boolean>) => {
         state.updating = payload;
-    }
+    },
+    checkAll: setCheckedAll(true),
+    unCheckAll: setCheckedAll(false),
 }
 
 export default cartActions;

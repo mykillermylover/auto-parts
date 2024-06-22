@@ -1,4 +1,4 @@
-import { Card, CardProps, Divider, Text } from 'react-native-paper';
+import { Card, CardProps, Text } from 'react-native-paper';
 import { QuantitySegmentedButtons } from '@shared/components/inputs/quantity-segmented-buttons';
 import React, { useMemo } from 'react';
 import { SearchArticle } from '@store/query/search/responses/articles.response';
@@ -18,15 +18,9 @@ export const ArticleDetailsItem = ({ item, handleAddToCart, cardStyle }: Article
 
     return (
         <Card style={cardStyle}>
-            <Card.Title
-                title={item.brand}
-                subtitle={item.number}
-            />
             <Card.Content>
-                <Text variant='bodyMedium'>{item.description}</Text>
-                <Divider/>
                 <Text variant={'headlineSmall'}>{item.price} руб.</Text>
-                <Text>Ожидаемый срок: {formattedDate}.</Text>
+                <Text>{formattedDate}</Text>
             </Card.Content>
             <Card.Actions>
                 <QuantitySegmentedButtons

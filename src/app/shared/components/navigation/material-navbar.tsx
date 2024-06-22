@@ -5,11 +5,12 @@ import React, { ReactNode } from 'react';
 
 interface RouteParams {
     back: boolean,
+    title: string,
 }
 export function MaterialNavBar({ navigation, route, options, back, children }: StackHeaderProps & { children?: ReactNode }) {
     const theme = useTheme();
     const routeParams = route.params as RouteParams;
-    const title = getHeaderTitle(options, route.name);
+    const title = routeParams?.title ?? getHeaderTitle(options, route.name);
     const backArrow = back && routeParams.back;
 
     return (

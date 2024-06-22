@@ -5,10 +5,12 @@ import { useTheme } from '@react-navigation/native';
 import { Easing } from 'react-native-reanimated';
 import { useAppSelector } from '@shared/hooks';
 import TabBarSelectors from '@store/tab-bar/tab-bar.selectors';
+import CartSelectors from '@store/cart/cart.selectors';
 
 export default function TabLayout() {
     const theme = useTheme();
     const isTabBarVisible = useAppSelector(TabBarSelectors.getVisibility);
+    const cartLength = useAppSelector(CartSelectors.cartLength) || false;
 
     return (
         <MaterialBottomTabs
@@ -45,6 +47,7 @@ export default function TabLayout() {
                 options={{
                     title: 'Корзина',
                     tabBarIcon: ({ color }) => <Icon size={30} source='cart' color={color}/>,
+                    tabBarBadge: cartLength,
                 }}
             />
             <MaterialBottomTabs.Screen
