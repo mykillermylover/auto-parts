@@ -6,10 +6,11 @@ import React from 'react';
 import { FindVehicleByPlateNumberResponse } from '@store/query/laximo/responses/find-vehicle-by-plate-number.response';
 
 interface VehicleSearchPlateProps {
-    data: FindVehicleByPlateNumberResponse
+    data: FindVehicleByPlateNumberResponse,
+    onLinkPress?: () => void
 }
 
-export const VehicleSearchPlate = ({ data }: VehicleSearchPlateProps) => {
+export const VehicleSearchPlate = ({ data, onLinkPress }: VehicleSearchPlateProps) => {
     return (
         <Card style={{ margin: APP_MARGIN }}>
             <Card.Title title={data.name} subtitle={data.brand}/>
@@ -39,7 +40,7 @@ export const VehicleSearchPlate = ({ data }: VehicleSearchPlateProps) => {
                     }}
                     asChild
                 >
-                    <Button>Перейти</Button>
+                    <Button onPress={onLinkPress}>Перейти</Button>
                 </Link>
             </Card.Actions>
         </Card>

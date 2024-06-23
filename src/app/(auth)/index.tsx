@@ -1,25 +1,60 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { HStack, VStack } from 'react-native-flex-layout';
-import LoginForm from '@components/login-form/login-form.component';
+import { HStack } from 'react-native-flex-layout';
+import LoginForm from '@components/login/login-form.component';
 import { Button, Card, Text } from 'react-native-paper';
 import { Link } from 'expo-router';
 import HideWithKeyboard from 'react-native-hide-with-keyboard';
-import { logoImage } from '@shared/consts/app.const';
+import { APP_MARGIN, logoImage } from '@shared/consts/app.const';
+import Animated, {
+    interpolate,
+    KeyboardState,
+    useAnimatedKeyboard,
+    useAnimatedReaction,
+    useDerivedValue,
+    useSharedValue,
+    withTiming
+} from 'react-native-reanimated';
+
+const COVER_HEIGHT = 300;
 
 export default function LoginComponent() {
     const [isLoading, setIsLoading] = useState(false);
+    const { state } = useAnimatedKeyboard()
+
+    const coverHeight = useSharedValue(COVER_HEIGHT);
+    const bottomHeight = useDerivedValue(
+        () => interpolate(coverHeight.value, [0, COVER_HEIGHT], [COVER_HEIGHT / 1.5, 0]));
+
+    useAnimatedReaction(() => state, (value) => {
+        switch (value.value) {
+            case (KeyboardState.OPENING || KeyboardState.OPEN):
+                coverHeight.value = withTiming(0, { duration: 150 });
+                break;
+            case (KeyboardState.CLOSING || KeyboardState.CLOSED):
+                coverHeight.value = withTiming(COVER_HEIGHT, { duration: 150 });
+                break;
+        }
+    })
 
     return (
         <>
-            <HideWithKeyboard>
-                <Card.Cover style={{ width: '100%', marginBottom: -150, height: 300, alignSelf: 'center', backgroundColor: 'transparent' }} source={logoImage} resizeMode={'contain'}/>
-            </HideWithKeyboard>
-            <VStack style={style.flexContainer}>
-                <LoginForm onLoading={(value) => setIsLoading(value)}/>
-            </VStack>
-    
+            <Animated.View style={{ height: coverHeight, overflow: 'hidden', marginBottom: -COVER_HEIGHT / 4 }}>
+                <Card.Cover
+                    style={{
+                        width: '90%',
+                        height: COVER_HEIGHT,
+                        alignSelf: 'center',
+                        backgroundColor: 'white',
+                    }}
+                    source={logoImage}
+                    resizeMode={'contain'}
+                />
+            </Animated.View>
+
+            <LoginForm onLoading={(value) => setIsLoading(value)}/>
+
             <HideWithKeyboard>
                 <HStack position={'absolute'} bottom={30} w='100%' items={'center'} justify={'evenly'}>
                     <Text>Ещё не зарегистрированы?</Text>
@@ -28,19 +63,10 @@ export default function LoginComponent() {
                     </Link>
                 </HStack>
             </HideWithKeyboard>
-            <SafeAreaView />
+
+            <Animated.View style={{ height: bottomHeight }} />
+            <SafeAreaView/>
         </>
 
     );
 }
-
-const style = StyleSheet.create({
-    flexContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        marginHorizontal: 30
-    },
-    h100: {
-        height: '100%',
-    }
-});

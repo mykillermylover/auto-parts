@@ -10,13 +10,18 @@ import { NetworkError } from '@shared/errors/network.error';
 import { ResponseService } from '@services/response.service';
 import { ToastService } from '@services/toast.service';
 import { useCheckAuthMutation } from '@store/query/local/local.api';
-import { defaultFormValues, loginFormConfig, LoginFormValues } from '@components/login-form/login-form.config';
+import { defaultFormValues, loginFormConfig, LoginFormValues } from '@components/login/login-form.config';
 import md5 from 'md5';
 import { SecureStoreService } from '@services/secure-store.service';
+import { APP_MARGIN } from '@shared/consts/app.const';
 
-interface OnLoadingFunction { onLoading: (value: boolean) => void }
+type OnLoadingFunction = (value: boolean) => void
 
-export default function LoginForm({ onLoading }: OnLoadingFunction) {
+interface LoginFormProps {
+    onLoading: OnLoadingFunction,
+}
+
+export default function LoginForm({ onLoading }: LoginFormProps) {
     const [isLoading, setIsLoading] = useState(false);
 
     const [checkAuth] = useCheckAuthMutation();
@@ -52,7 +57,7 @@ export default function LoginForm({ onLoading }: OnLoadingFunction) {
     };
 
     return (
-        <VStack spacing={30}>
+        <VStack spacing={30} fill justify='center'  mh={4 * APP_MARGIN}>
             <FormBuilder
                 control={control}
                 setFocus={setFocus}
@@ -60,15 +65,15 @@ export default function LoginForm({ onLoading }: OnLoadingFunction) {
             />
 
             <Button
-                rippleColor={'rgba(0, 0, 0, .32)'}
                 mode='contained'
                 onPress={() => {
                     setIsLoading(true);
 
-                    setTimeout(() => handleSubmit(submitForm,
-                        () => {
-                            setIsLoading(false);
-                        })(), 0);
+                    setTimeout(() => 
+                        void handleSubmit(submitForm,
+                            () => {
+                                setIsLoading(false);
+                            })(), 0);
                 }}
                 disabled={isLoading}
                 loading={isLoading}

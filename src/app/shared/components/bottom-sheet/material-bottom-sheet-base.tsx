@@ -1,98 +1,87 @@
-import { TranslucentBackground } from '@shared/components/translucent-background';
-import BottomSheet, { BottomSheetHandle, BottomSheetProps } from '@gorhom/bottom-sheet';
+import BottomSheet, {
+    BottomSheetBackdrop,
+    BottomSheetBackdropProps,
+    BottomSheetHandle,
+    BottomSheetProps
+} from '@gorhom/bottom-sheet';
 import { IconButton, useTheme } from 'react-native-paper';
-import React, { RefObject, useCallback, useEffect, useState } from 'react';
+import React, { RefObject, useCallback } from 'react';
 import { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { BottomSheetViewProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetView/types';
 import { APP_MARGIN } from '@shared/consts/app.const';
+import { Flex } from 'react-native-flex-layout';
 
 export type MaterialBottomSheetBaseProps = Omit<BottomSheetProps, 'children'> & {
     bottomSheetRef: RefObject<BottomSheetMethods>,
     children: BottomSheetViewProps['children'],
     closeButton?: boolean,
-    translucentBackground?: boolean;
+    backdrop?: boolean;
+    noMarginTop?: boolean,
+    onSheetClose?: () => void
 }
 
 export const MaterialBottomSheetBase = (
     {
         bottomSheetRef,
-        translucentBackground = true,
-        enableDynamicSizing,
-        enablePanDownToClose,
+        backdrop = true,
         children,
         index = -1,
-        onClose,
         closeButton = true,
-        snapPoints,
-        onAnimate,
+        noMarginTop = false,
+        onSheetClose,
         onChange,
         ...props
     }: MaterialBottomSheetBaseProps
 ) => {
 
-    const theme = useTheme();
-    const [backgroundVisibility, setBackgroundVisibility] = useState(false);
+    const { colors } = useTheme();
 
-    const hide = useCallback(() => {
-        bottomSheetRef.current?.close();
-    }, []);
-
-    const handleAnimation = (from: number, to: number) => {
-        if (from === -1) {    // open
-            setBackgroundVisibility(true);
-        } else if (to === -1) { // close
-            setBackgroundVisibility(false);
-        }
-    }
-
-    useEffect(() => {
-        return () => { setBackgroundVisibility(false) }
-    }, []);
+    const renderBackdrop = useCallback((props: BottomSheetBackdropProps) => (
+        <BottomSheetBackdrop
+            appearsOnIndex={0}
+            disappearsOnIndex={-1}
+            {...props}
+        />
+    ), [])
 
     return (
         <>
-            {translucentBackground &&
-                <TranslucentBackground
-                    onPress={hide}
-                    visible={backgroundVisibility}
-                />
-            }
             <BottomSheet
-                enableDynamicSizing={enableDynamicSizing}
-                enablePanDownToClose={enablePanDownToClose}
                 index={index}
-                onClose={onClose}
+                backdropComponent={backdrop ? renderBackdrop : null}
                 handleComponent={closeButton ? (props) => {
                     return (
                         <>
-                            <BottomSheetHandle {...props} style={{ marginBottom: APP_MARGIN * 4 }} />
+                            <BottomSheetHandle {...props} style={{ marginBottom: APP_MARGIN * 4 }}/>
                             <IconButton
                                 style={{
                                     position: 'absolute',
                                     right: 0,
                                 }}
-                                icon={{
-                                    source: 'close',
-                                    direction: 'ltr'
-                                }}
+                                icon='close'
                                 onPress={() => bottomSheetRef.current?.close()}
                             />
                         </>
                     )
                 } : undefined}
-                backgroundStyle={{ backgroundColor: theme.colors.background }}
-                snapPoints={snapPoints}
+                backgroundStyle={{ backgroundColor: colors.background }}
                 ref={bottomSheetRef}
-                onChange={onChange}
-                onAnimate={(fromIndex, toIndex) => {
-                    handleAnimation(fromIndex, toIndex);
-                    if (onAnimate) {
-                        onAnimate(fromIndex, toIndex);
+                style={{
+                    marginTop: !noMarginTop ? APP_MARGIN * 10 : undefined,
+                }}
+
+                onChange={index => {
+                    onChange && onChange(index);
+                    if(index === -1 && onSheetClose) {
+                        onSheetClose();
                     }
                 }}
+
                 {...props}
             >
-                {children}
+                <Flex fill mb={!noMarginTop ? APP_MARGIN * 10 : undefined}>
+                    {children}
+                </Flex>
             </BottomSheet>
         </>
     )

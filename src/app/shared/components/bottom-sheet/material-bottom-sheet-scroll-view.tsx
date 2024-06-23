@@ -6,7 +6,7 @@ import { MaterialBottomSheetBase } from '@shared/components/bottom-sheet/materia
 
 export const MaterialBottomSheetScrollView = (
     {
-        onClose = () => {},
+        onClose = () => null,
         onChange,
         bottomSheetRef,
         children,
@@ -36,7 +36,7 @@ export const MaterialBottomSheetScrollView = (
                 snapPoints={snapPoints}
                 onAnimate={onAnimate}
                 closeButton={closeButton}
-                translucentBackground={translucentBackground}
+                backdrop={translucentBackground}
                 onChange={onChange}
                 {...props}
             >

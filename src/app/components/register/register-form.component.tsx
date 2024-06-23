@@ -4,13 +4,14 @@ import {
     defaultRegisterFormValues,
     RegisterFormValues,
     registerRetailConfig
-} from '@components/register-form/register-form-config';
+} from '@components/register/register-form-config';
 import { useForm } from 'react-hook-form';
 import { ScrollView } from 'react-native';
 import { Button, TextInput, TextInputProps } from 'react-native-paper';
 import { useRegistrationMutation } from '@store/query/user/user.api';
 import { UserProp } from '@store/query/user/user.prop';
 import { useExpoRouter } from 'expo-router/build/global-state/router-store';
+import { router } from 'expo-router';
 
 export default function RegisterForm() {
     const [isLoading, setIsLoading] = useState(false);
@@ -18,13 +19,12 @@ export default function RegisterForm() {
     const { control, setFocus, handleSubmit } = useForm({
         defaultValues: defaultRegisterFormValues
     });
-    const router = useExpoRouter();
     const [register] = useRegistrationMutation();
 
     const submitForm = async (formData: RegisterFormValues) => {
         try {
             await register(formData as unknown as UserProp).unwrap();
-            router.goBack();
+            router.back();
         } catch (e) {
             setIsLoading(false);
         }
@@ -54,7 +54,7 @@ export default function RegisterForm() {
                 onPress={() => {
                     setIsLoading(true);
                     setTimeout(() => 
-                        handleSubmit(
+                        void handleSubmit(
                             submitForm,
                             () => setIsLoading(false)
                         )()

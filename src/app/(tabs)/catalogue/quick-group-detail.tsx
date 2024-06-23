@@ -40,16 +40,25 @@ export default function QuickGroupDetail() {
     const flatCategories = useMemo(() =>
         categories.flatMap(category => {
             const { Unit, ...rest } = category;
+            const units = Unit.map(unit => {
+                return {
+                    type: 'unit',
+                    ...unit
+                } as ListQuickDetailUnit & { type: 'unit' }
+            })
             return [
-                rest,
-                ...Unit
+                {
+                    type: 'category',
+                    ...rest
+                } as Omit<ListQuickDetailCategory, 'Unit'> & { type: 'category' },
+                ...units
             ]
         }),
     [categories]);
 
     const stickyHeaderIndices = useMemo(() => {
         return flatCategories.flatMap((item, index) => {
-            if ((item as ListQuickDetailCategory).categoryid) {
+            if (item.type === 'category') {
                 return index;
             } else return [];
         })
@@ -70,30 +79,24 @@ export default function QuickGroupDetail() {
                 onRefresh={refetch}
                 estimatedItemSize={380}
                 data={flatCategories}
-                renderItem={({ item: category }) => {
-                    if ((category as ListQuickDetailCategory).categoryid) {
+                renderItem={({ item }) => {
+                    if (item.type === 'category') {
                         return (
                             <HStack style={[styles.listHeader]} bg={colors.background}>
-                                <Text variant='titleLarge'>{category.name}</Text>
+                                <Text variant='titleLarge'>{item.name}</Text>
                             </HStack>
                         )
                     }
-                    const unit = category as ListQuickDetailUnit;
 
                     return (
                         <QuickGroupDetailUnit
-                            unit={unit}
+                            unit={item}
                             brand={queryParams.brand}
                             handleInfoPress={handlePress}
                         />
                     )
                 }}
-                getItemType={(item) => {
-                    if ((item as ListQuickDetailCategory).categoryid)
-                        return 'category'
-                    else
-                        return 'unit'
-                }}
+                getItemType={(item) => item.type}
                 stickyHeaderIndices={stickyHeaderIndices}
             />
 

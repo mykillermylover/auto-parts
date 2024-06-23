@@ -5,7 +5,12 @@ import { concatValues } from '@shared/features/concat-object-values';
 import { Link } from 'expo-router';
 import React from 'react';
 
-export const VehicleSearchVin = ({ data }: { data: FindVehicleByVinResponse[] }) => {
+interface VehicleSearchVinProps {
+    data: FindVehicleByVinResponse[] ,
+    onLinkPress?: () => void
+}
+
+export const VehicleSearchVin = ({ data, onLinkPress }: VehicleSearchVinProps) => {
     return (
         <>
             {data.map((item: FindVehicleByVinResponse) => {
@@ -34,7 +39,7 @@ export const VehicleSearchVin = ({ data }: { data: FindVehicleByVinResponse[] })
                                 }}
                                 asChild
                             >
-                                <Button>Перейти</Button>
+                                <Button onPress={onLinkPress}>Перейти</Button>
                             </Link>
                         </Card.Actions>
                     </Card>

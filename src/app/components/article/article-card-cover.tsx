@@ -14,7 +14,13 @@ interface ArticleCarouselProps {
     imageUrlFull?: string;
 }
 
-export const ArticleCardCover = ({ images, width, height = width / 1.5, imageWrapperStyle, imageUrlFull = ABCPImageUrlFull }: ArticleCarouselProps) => {
+export const ArticleCardCover = ({
+    images,
+    width,
+    height = width / 1.5,
+    imageWrapperStyle,
+    imageUrlFull = ABCPImageUrlFull
+}: ArticleCarouselProps) => {
     const { roundness } = useTheme();
 
     const progress = useSharedValue(0);
@@ -34,7 +40,7 @@ export const ArticleCardCover = ({ images, width, height = width / 1.5, imageWra
                 }, imageWrapperStyle]}
                 loop={false}
                 data={images}
-                renderItem={({ item }) => 
+                renderItem={({ item }) =>
                     <Card.Cover
                         style={[{ width, height }]}
                         height={height}
@@ -50,7 +56,7 @@ export const ArticleCardCover = ({ images, width, height = width / 1.5, imageWra
             />
         </View>
     )
-    
+
     return (
         <Card.Cover
             style={[{ width, height }, imageWrapperStyle]}

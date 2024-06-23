@@ -1,9 +1,9 @@
-import {FormBuilderConfigArray} from '@shared/types/form-builder-config-array.type';
-import {TextInput} from 'react-native-paper';
+import { FormBuilderConfigArray } from '@shared/types/form-builder-config-array.type';
+import { TextInput } from 'react-native-paper';
 import React from 'react';
-import {PasswordTextInput} from '@shared/components/inputs/password-text-input';
+import { PasswordTextInput } from '@shared/components/inputs/password-text-input';
 
-export type LoginFormValues = {
+export interface LoginFormValues {
     login: string,
     password: string,
 }

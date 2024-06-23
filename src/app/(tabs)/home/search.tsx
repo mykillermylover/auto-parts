@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
 
 import { ItemModel } from '@shared/models/item.model';
@@ -26,6 +26,14 @@ export default function Search() {
     const [currentItem, setCurrentItem] = useState(defaultArticle);
 
     const bottomSheetRef = useRef<BottomSheet>(null);
+    const flashListRef = useRef<FlashList<string | FormattedArticle>>(null);
+
+    useEffect(() => {
+        if(!isObjectEmpty(item)) {
+            bottomSheetRef.current?.close();
+            flashListRef.current?.scrollToIndex({ index: 0 });
+        }
+    }, [item.number, item.brand]);
 
     const listItems = useMemo(() => {
         const dataItems = isObjectEmpty(data.item) ? [] : ['Искомый артикул', ...data.item];
@@ -42,8 +50,8 @@ export default function Search() {
                     index : null
             }).filter(item => item !== null) as number[];
     }, [listItems])
-
     const itemAliases = useMemo(() => data.item.length > 1, [data]);
+    
     const isFullRow = useCallback((index: number) => {
         const lastIndex = listItems.length - data.item.length - stickyHeaderIndices.length - 1;
         return (index === 1 && !itemAliases) ||
@@ -71,6 +79,7 @@ export default function Search() {
     return (
         <>
             <FlashList
+                ref={flashListRef}
                 overrideItemLayout={overrideItemLayout}
                 ListEmptyComponent={() => {
                     return (
@@ -113,7 +122,6 @@ export default function Search() {
                 bottomSheetRef={bottomSheetRef}
                 enablePanDownToClose
                 snapPoints={[520, '100%']}
-                style={styles.bottomSheet}
             >
                 <ArticleDetails item={currentItem}/>
             </MaterialBottomSheetBase>
@@ -125,8 +133,5 @@ const styles = StyleSheet.create({
     listHeader: {
         padding: APP_MARGIN,
         flex: 1,
-    },
-    bottomSheet: {
-        marginTop: APP_MARGIN * 4,
     }
 })

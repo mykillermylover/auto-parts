@@ -1,22 +1,20 @@
-import {createApi} from '@reduxjs/toolkit/query/react';
-import {axiosBaseQuery} from '@store/query/axios.query';
-import {CarModelsResponse} from '@store/query/car-tree/car-models.response';
-import {CarModificationResponse} from '@store/query/car-tree/car-modification.response';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { axiosBaseQuery } from '@store/query/axios.query';
+import { CarModelsResponse } from '@store/query/car-tree/car-models.response';
+import { CarModificationResponse } from '@store/query/car-tree/car-modification.response';
 
 export const carTreeApi = createApi({
     reducerPath: 'carTreeApi',
-    baseQuery: axiosBaseQuery({baseUrl: 'cartree/'}),
+    baseQuery: axiosBaseQuery({ baseUrl: 'cartree/' }),
     endpoints(build) {
         return {
-            years: build.query<number[], number>({
-                query: (manufacturerId) => ({
+            carTreeYears: build.query<number[], { manufacturerId: number } | void>({
+                query: (params) => ({
                     url: 'years',
-                    params: {
-                        manufacturerId
-                    }
+                    params
                 })
             }),
-            manufacturers: build.query<CarModelsResponse, number | void>({
+            carTreeManufacturers: build.query<CarModelsResponse, number | void>({
                 query: (year) => ({
                     url: 'years',
                     params: {
@@ -24,8 +22,8 @@ export const carTreeApi = createApi({
                     }
                 })
             }),
-            models: build.query<CarModelsResponse,{manufacturerId: number, year?: number}>({
-                query: ({manufacturerId, year}) => ({
+            carTreeModels: build.query<CarModelsResponse,{ manufacturerId: number, year?: number }>({
+                query: ({ manufacturerId, year }) => ({
                     url: 'years',
                     params: {
                         manufacturerId,
@@ -33,8 +31,8 @@ export const carTreeApi = createApi({
                     }
                 })
             }),
-            modifications: build.query<CarModificationResponse, {manufacturerId: number, modelId: number, year?: number}>({
-                query: ({manufacturerId, modelId, year}) => ({
+            carTreeModifications: build.query<CarModificationResponse, { manufacturerId: number, modelId: number, year?: number }>({
+                query: ({ manufacturerId, modelId, year }) => ({
                     url: 'years',
                     params: {
                         manufacturerId,
@@ -48,8 +46,8 @@ export const carTreeApi = createApi({
 });
 
 export const {
-    useYearsQuery,
-    useManufacturersQuery,
-    useModelsQuery,
-    useModificationsQuery
+    useCarTreeYearsQuery,
+    useCarTreeManufacturersQuery,
+    useCarTreeModelsQuery,
+    useCarTreeModificationsQuery
 } = carTreeApi;

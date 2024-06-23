@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ProfileComponent } from '@components/profile/profile.component';
 import { Flex, HStack, VStack } from 'react-native-flex-layout';
@@ -12,12 +12,20 @@ import { MaterialBottomSheetView } from '@shared/components/bottom-sheet/materia
 import UserUpdateForm from '@components/profile/user-update-form';
 
 export default function Index() {
+    const [needForm, setNeedForm] = useState(false);
+
     const user = useAppSelector(UserSelectors.getUser);
     const [logout, { isLoading }] = useLogoutMutation();
 
     const dispatch = useAppDispatch();
 
     const bottomSheetRef = useRef<BottomSheet>(null);
+
+    const handlePress = () => {
+        dispatch(TabBarActions.hideTabBar());
+        setNeedForm(true);
+        setTimeout(() => bottomSheetRef.current?.snapToIndex(0), 200);
+    }
 
     if (!user || isLoading) {
         return (
@@ -45,21 +53,18 @@ export default function Index() {
                             source: 'pencil',
                             direction: 'ltr'
                         }}
-                        onPress={() => {
-                            dispatch(TabBarActions.hideTabBar());
-                            setTimeout(() => bottomSheetRef.current?.snapToIndex(0), 200);
-                        }}
+                        onPress={handlePress}
                         label={'Редактировать'}
                     />
                 </HStack>
             </VStack>
 
             <MaterialBottomSheetView
-                snapPoints={[400, '90%']}
-                onClose={() => dispatch(TabBarActions.showTabBar())}
+                snapPoints={[400, '100%']}
+                onSheetClose={() => dispatch(TabBarActions.showTabBar())}
                 bottomSheetRef={bottomSheetRef}
             >
-                <UserUpdateForm/>
+                {needForm && <UserUpdateForm/>}
             </MaterialBottomSheetView>
         </>
     );

@@ -6,37 +6,23 @@ import { MaterialBottomSheetBase } from '@shared/components/bottom-sheet/materia
 
 export const MaterialBottomSheetView = (
     {
-        onClose = () => {},
-        onChange,
-        bottomSheetRef,
         children,
-        snapPoints,
-        onAnimate,
-        index = -1,
-        enablePanDownToClose,
-        closeButton = true,
-        translucentBackground = true,
-        enableDynamicSizing
+        backdrop = true,
+        ...props
     }: Omit<BottomSheetProps, 'children'> & {
         bottomSheetRef: RefObject<BottomSheetMethods>,
         children: BottomSheetViewProps['children'],
         closeButton?: boolean,
-        translucentBackground?: boolean,
+        backdrop?: boolean,
+        noMarginTop?: boolean,
+        onSheetClose?: () => void
     }) => {
 
     return (
         <>
             <MaterialBottomSheetBase
-                bottomSheetRef={bottomSheetRef}
-                enableDynamicSizing={enableDynamicSizing}
-                enablePanDownToClose={enablePanDownToClose}
-                index={index}
-                onClose={onClose}
-                snapPoints={snapPoints}
-                onAnimate={onAnimate}
-                closeButton={closeButton}
-                translucentBackground={translucentBackground}
-                onChange={onChange}
+                backdrop={backdrop}
+                {...props}
             >
                 <BottomSheetView style={{ flex: 1 }}>
                     {children}

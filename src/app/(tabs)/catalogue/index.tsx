@@ -22,6 +22,7 @@ export default function CatalogueMain() {
     useEffect(() => {
         if (redirectedVIN) {
             setSearchValue(redirectedVIN);
+            router.setParams({ redirectedVIN: '' })
             searchBarRef.current?.focus();
         }
     }, [redirectedVIN]);
@@ -42,7 +43,6 @@ export default function CatalogueMain() {
     const handleBlur = () => {
         setIsActive(false);
     };
-    const resetRedirect = () => router.setParams({ redirectedVIN: '' });
 
     const expand = () => {
         Keyboard.dismiss();
@@ -50,7 +50,6 @@ export default function CatalogueMain() {
     }
 
     const search = useCallback(async () => {
-        resetRedirect();
         try {
             if (searchValue.length === VIN_LENGTH) {
                 expand();
@@ -75,7 +74,7 @@ export default function CatalogueMain() {
                 <VStack ph={16} w='100%'>
                     <Searchbar
                         ref={searchBarRef}
-                        onSubmitEditing={() => search()}
+                        onSubmitEditing={search}
                         value={searchValue}
                         onChangeText={(text) => {
                             setError(false);
@@ -102,7 +101,7 @@ export default function CatalogueMain() {
             </Flex>
             <MaterialBottomSheetScrollView
                 enablePanDownToClose
-                snapPoints={['50%','90%']}
+                snapPoints={['50%','100%']}
                 bottomSheetRef={bottomSheetRef}
             >
                 <VehicleSearch data={data} isLoading={isLoading}/>

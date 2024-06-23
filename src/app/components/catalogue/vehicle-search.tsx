@@ -5,6 +5,7 @@ import { MaterialActivityIndicator } from '@shared/components/material-activity-
 import { VehicleSearchVin } from '@components/catalogue/vehicle-search-vin';
 import { FindVehicleByPlateNumberResponse } from '@store/query/laximo/responses/find-vehicle-by-plate-number.response';
 import { VehicleSearchPlate } from '@components/catalogue/vehicle-search-plate';
+import { useBottomSheet } from '@gorhom/bottom-sheet';
 
 interface VehicleSearchProps {
     data?: FindVehicleByVinResponse[] | FindVehicleByPlateNumberResponse,
@@ -12,11 +13,14 @@ interface VehicleSearchProps {
 }
 
 export const VehicleSearch = ({ data, isLoading = false }: VehicleSearchProps) => {
+    const { close } = useBottomSheet()
+
+    const handleLinkPress = () => close();
 
     if (isLoading) return <MaterialActivityIndicator elevation={0}/>
     if (!data) return <HelperText type='info'>Нет результатов</HelperText>
 
-    if (Array.isArray(data)) return <VehicleSearchVin data={data}/>
+    if (Array.isArray(data)) return <VehicleSearchVin onLinkPress={handleLinkPress} data={data}/>
 
-    return <VehicleSearchPlate data={data}/>;
+    return <VehicleSearchPlate onLinkPress={handleLinkPress} data={data}/>;
 }

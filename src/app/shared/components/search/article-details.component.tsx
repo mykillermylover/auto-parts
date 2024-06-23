@@ -82,9 +82,6 @@ export const ArticleDetails = ({ item }: DetailsProps) => {
                 style={styles.listWrapper}
             >
                 <FlashList
-                    contentContainerStyle={{
-                        paddingBottom: APP_MARGIN
-                    }}
                     estimatedItemSize={300}
                     data={item.articles}
                     renderItem={({ item }) =>
@@ -112,7 +109,6 @@ const styles = StyleSheet.create({
     listWrapper: {
         minHeight: 300,
         marginHorizontal: APP_MARGIN,
-        marginBottom: 4 * APP_MARGIN,
         marginTop: APP_MARGIN,
         overflow: 'hidden',
         flex: 1

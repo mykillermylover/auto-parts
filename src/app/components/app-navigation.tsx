@@ -11,7 +11,7 @@ export default function AppNav() {
     const isInit = useSelector(InitSelectors.getInitSelector);
 
     if(!isInit) return (
-        <MaterialActivityIndicator />
+        <MaterialActivityIndicator elevation={3} />
     );
 
     return (

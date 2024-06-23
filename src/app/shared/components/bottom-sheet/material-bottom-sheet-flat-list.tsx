@@ -9,7 +9,7 @@ import { MaterialBottomSheetBase } from '@shared/components/bottom-sheet/materia
 
 export const MaterialBottomSheetFlatList = <T,>(
     {
-        onClose = () => {},
+        onClose = () => null,
         onChange,
         bottomSheetRef,
         snapPoints,
@@ -38,7 +38,7 @@ export const MaterialBottomSheetFlatList = <T,>(
                 snapPoints={snapPoints}
                 onAnimate={onAnimate}
                 closeButton={closeButton}
-                translucentBackground={translucentBackground}
+                backdrop={translucentBackground}
                 onChange={onChange}
             >
                 <BottomSheetFlatList
