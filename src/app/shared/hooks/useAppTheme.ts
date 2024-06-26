@@ -1,7 +1,7 @@
-import {useColorScheme} from 'react-native';
-import {MD3Theme} from 'react-native-paper/lib/typescript/types';
-import {Theme} from '@react-navigation/native';
-import {darkNavTheme, darkTheme, lightNavTheme, lightTheme} from '@style/theme';
+import { useColorScheme } from 'react-native';
+import { MD3Theme } from 'react-native-paper/lib/typescript/types';
+import { Theme } from '@react-navigation/native';
+import { darkNavTheme, darkTheme, lightNavTheme, lightTheme } from '@style/theme';
 
 export default function useAppTheme() {
     const colorScheme = useColorScheme();

@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import 'expo-dev-client';
 
-import { PaperProvider, useTheme } from 'react-native-paper';
+import { PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider } from '@react-navigation/native';
 import React, { useEffect } from 'react';
@@ -19,7 +19,7 @@ import { PersistData } from '@shared/features/persist-data';
 export default function AppLayout() {
     const [appTheme, navTheme] = useAppTheme();
 
-    ToastService.theme = useTheme();
+    ToastService.theme = appTheme;
 
     useEffect(() => {
         void InitApp();

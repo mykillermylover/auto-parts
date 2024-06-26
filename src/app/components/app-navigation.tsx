@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
 import UserSelectors from '@store/user/user.selectors';
 import { MaterialStack } from '@shared/components/navigation/material-stack';
-import { MaterialNavBar } from '@shared/components/navigation/material-navbar';
 import React from 'react';
 import InitSelectors from '@store/init/init.selectors';
 import { MaterialActivityIndicator } from '@shared/components/material-activity-indicator';
@@ -17,7 +16,6 @@ export default function AppNav() {
     return (
         <MaterialStack
             screenOptions={{
-                header: (props) => <MaterialNavBar {...props}/>,
                 headerShown: false
             }}
         >
